@@ -1,4 +1,3 @@
-const path      = require('path');
 const fs        = require('fs');
 const moment    = require('moment');
 const banners   = require("../banners.json");
@@ -48,7 +47,7 @@ class BannerController {
         }
     }
 
-    getRandomBanner(publicPath, params) {
+    getRandomBanner(params) {
 
         return new Promise((resolve, reject) => {
 
@@ -59,7 +58,6 @@ class BannerController {
             ;
 
             let allowedBanners = availableBanners
-
                 .filter(banner => !banner.isDefault)
                 .filter(banner => 
                     moment(banner.begin).isBefore(now)
@@ -68,43 +66,33 @@ class BannerController {
             ;
 
             if(allowedBanners.length === 0) {
-
                 allowedBanners = availableBanners
                     .filter(banner => banner.isDefault)
             }
 
             const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
-            const randomBannerPath = path.join(publicPath, randomBanner.path);
 
-            resolve(randomBannerPath);
+            resolve(randomBanner.path);
         });
     }
 
     containsCompany(companyName) {
-
         return (banner) => {
-
             if (companyName) {
                 return banner.companies[companyName];
             }
-
             return true;
         }
     }
 
     uploadBanner(bannerFolder, fieldname, file, filename) {
-
         return new Promise((resolve, reject) => {
-
             console.log("Uploading: " + filename);
-
-            const newFilename = Date.now()+'.png'; // get the real img extension
-
+            const [_, name, extension] = /(.*)\.(.*)/.exec(filename)
+            const newFilename = `${Date.now()}.${extension}`;
             const fstream = fs.createWriteStream(bannerFolder + newFilename);
             file.pipe(fstream);
-
             fstream.on("close", () => {
-
                 console.log("Upload succeed !");
                 resolve(newFilename);
             });

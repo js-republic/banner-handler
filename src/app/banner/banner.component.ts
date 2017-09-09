@@ -114,7 +114,7 @@ export class BannerComponent implements OnInit {
             headers
         ) => {
             const img = JSON.parse(response).data;
-            this.banner.path = "assets/banners/" + img;
+            this.banner.path = "/assets/banners/" + img;
         };
     }
 
