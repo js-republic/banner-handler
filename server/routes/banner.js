@@ -1,6 +1,7 @@
 const express = require("express");
-const path    = require('path');
+const path = require("path");
 const bannerCtrl = require("../controllers/banner");
+const auth = require("../auth");
 
 const router = express.Router();
 const PUBLIC_PATH = `${__dirname}/../../dist/`;
@@ -8,14 +9,14 @@ const PUBLIC_PATH = `${__dirname}/../../dist/`;
 /**
  *	Returns all banners
  */
-router.get("/", (req, res) => {
+router.get("/", auth.secured(), (req, res) => {
   res.json(bannerCtrl.getBannersArray());
 });
 
 /**
  *	Inserts a new banner into existing ones
  */
-router.post("/", (req, res) => {
+router.post("/", auth.secured(), (req, res) => {
   bannerCtrl.insertBanner(req.body).then(banner => {
     res.status(201).send({ banner });
   });
@@ -24,7 +25,7 @@ router.post("/", (req, res) => {
 /**
  *	Delete given banner
  */
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth.secured(), (req, res) => {
   const id = req.params.id;
   try {
     bannerCtrl.deleteBanner(id);
@@ -50,14 +51,14 @@ router.get("/random", (req, res) => {
     })
     .catch(e => {
       console.error(e);
-      res.status(500).send(e.message)
+      res.status(500).send(e.message);
     });
 });
 
 /**
  *	Handles banner picture upload
  */
-router.post("/upload", (req, res) => {
+router.post("/upload", auth.secured(), (req, res) => {
   const bannerFolder = `${PUBLIC_PATH}/assets/banners/`;
   req.pipe(req.busboy);
 

@@ -1,1 +1,14 @@
-{}
+{
+  "1505235515980": {
+    "path": "/assets/banners/1505235514054.gif",
+    "begin": "2017-09-12T16:58:23.241Z",
+    "end": "2017-10-12T16:58:23.241Z",
+    "id": 1505235515980,
+    "companies": {
+      "js": true,
+      "ux": true,
+      "iot": true
+    },
+    "isDefault": false
+  }
+}
