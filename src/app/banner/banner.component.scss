@@ -1,33 +1,50 @@
-md-card{
-	margin: 20px;
+:host {
+  display: flex;
+  flex-direction: column;
+  md-sidenav-container {
+    flex: 1;
+
+    md-sidenav {
+      display: flex;
+      flex-direction: column;
+      banner-form {
+        flex: 1;
+      }
+    }
+
+    md-card {
+      margin: 20px;
+      .banners {
+        width: 100%;
+        border-collapse: collapse;
+
+        td {
+          border: 1px solid #001;
+          text-align: center;
+          padding: 10px;
+        }
+
+        th {
+          cursor: pointer;
+          .sortable {
+            padding: 0 5px;
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+          }
+        }
+
+        img {
+          width: 100%;
+          max-width: 500px;
+        }
+      }
+    }
+  }
 }
 
-.banner-form {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-
-	&>* {
-		margin-top: 20px;
-	}
-
-	img {
-		width: 500px;
-	}
-}
-
-.banners {
-	width: 100%;
-	border-collapse: collapse;
-
-	td {
-		border :1px solid #001;
-		text-align: center;
-		padding: 10px;
-	}
-
-	img {
-		width: 100%;
-		max-width: 500px;
-	}
+.add-banner-floating-btn {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }

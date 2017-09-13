@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from "@angular/core";
+import { NgModule, LOCALE_ID } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
@@ -18,12 +18,6 @@ import { FileUploadModule } from "ng2-file-upload";
 
 import { RouterModule, Routes } from "@angular/router";
 
-const appRoutes: Routes = [
-  { path: "login", component: BannerComponent },
-  { path: "main", component: LoginComponent },
-  { path: '', redirectTo: '/main', pathMatch: 'full'}
-];
-
 import {
   MdButtonModule,
   MdDatepickerModule,
@@ -35,11 +29,21 @@ import {
   MdIconModule,
   MdTableModule,
   MdSortModule,
-  MdCheckboxModule
+  MdCheckboxModule,
+  MdProgressBarModule,
+  MdSidenavModule
 } from "@angular/material";
+import { FormComponent } from './banner/form/form.component';
+
+
+const appRoutes: Routes = [
+  { path: "login", component: BannerComponent },
+  { path: "main", component: LoginComponent },
+  { path: "", redirectTo: "/main", pathMatch: "full" }
+];
 
 @NgModule({
-  declarations: [AppComponent, BannerComponent, LoginComponent, AliciaKeys],
+  declarations: [AppComponent, BannerComponent, LoginComponent, AliciaKeys, FormComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -56,13 +60,19 @@ import {
     MdTableModule,
     MdSortModule,
     MdCheckboxModule,
+    MdProgressBarModule,
     FileUploadModule,
+    MdSidenavModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [BannerService, BannerDataSource],
+  providers: [
+    BannerService,
+    BannerDataSource,
+    { provide: LOCALE_ID, useValue: "fr-FR" }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
