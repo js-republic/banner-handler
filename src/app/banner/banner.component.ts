@@ -1,32 +1,28 @@
-import { Injectable, Component, OnInit, ViewChild } from "@angular/core";
-import { Http, Response } from "@angular/http";
-import { DataSource } from "@angular/cdk/collections";
+import {Component, OnInit, ViewChild} from '@angular/core';
 
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/map";
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
-import { Observable } from "rxjs/Rx";
-import * as moment from "moment";
+import * as moment from 'moment';
 
-import { Banner } from "./banner.model";
-import { BannerService } from "./banner.service";
+import {Banner} from './banner.model';
+import {BannerService} from './banner.service';
 
-import { MdSidenav } from "@angular/material";
+import {MatSidenav} from '@angular/material';
 
 @Component({
-  selector: "banner",
-  templateUrl: "./banner.component.html",
-  styleUrls: ["./banner.component.scss"]
+  selector: 'app-banner',
+  templateUrl: './banner.component.html',
+  styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent implements OnInit {
-  @ViewChild("sidenav") private sidenav: MdSidenav;
+  @ViewChild('sidenav') private sidenav: MatSidenav;
   public banners: Banner[] = [];
-  public sortStatus = {
-    begin: "asc",
-    end: ""
-  };
+  public sortStatus = {begin: 'asc', end: ''};
+  public newBanner = new Banner();
 
-  constructor(private http: Http, private bannerService: BannerService) {}
+  constructor(private bannerService: BannerService) {
+  }
 
   ngOnInit() {
     this.loadBanners();
@@ -46,20 +42,25 @@ export class BannerComponent implements OnInit {
       );
   }
 
+  createNewBanner() {
+    this.sidenav.open();
+    this.newBanner = new Banner();
+  }
+
   sortBanners(propertyName) {
     Object.entries(this.sortStatus).forEach(([key, value]) => {
       if (propertyName !== key) {
-        this.sortStatus[key] = "";
+        this.sortStatus[key] = '';
       }
     });
 
     if (
-      this.sortStatus[propertyName] === "" ||
-      this.sortStatus[propertyName] === "desc"
+      this.sortStatus[propertyName] === '' ||
+      this.sortStatus[propertyName] === 'desc'
     ) {
-      this.sortStatus[propertyName] = "asc";
+      this.sortStatus[propertyName] = 'asc';
     } else {
-      this.sortStatus[propertyName] = "desc";
+      this.sortStatus[propertyName] = 'desc';
     }
 
     this.banners.sort((a, b) => {
@@ -76,7 +77,7 @@ export class BannerComponent implements OnInit {
         result = -1;
       }
 
-      if (this.sortStatus[propertyName] === "desc") {
+      if (this.sortStatus[propertyName] === 'desc') {
         result *= -1;
       }
 

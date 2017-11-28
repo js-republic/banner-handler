@@ -1,50 +1,49 @@
-<md-card>
+<mat-card>
   <h3>Ajouter une bannière</h3>
-  <md-card-content>
+  <mat-card-content>
     <form class="banner-form" action="#">
-      <h3>Période d'utilisation :</h3>
       <section class="usage-periode-container">
-        <md-checkbox name="is-default" [(ngModel)]="banner.isDefault">Tout le temps</md-checkbox>
+        <h3>Période d'utilisation :</h3>
+        <mat-checkbox name="is-default" [(ngModel)]="banner.isDefault">Tout le temps</mat-checkbox>
         <div *ngIf="!banner.isDefault">
           <p style="font-weight:bold">- OU -</p>
-          <md-form-field>
-            <input mdInput [mdDatepicker]="beginPicker" [(ngModel)]="banner.begin" name="begin" placeholder="Date début de publication">
-            <md-datepicker-toggle mdSuffix [for]="beginPicker"></md-datepicker-toggle>
-            <md-datepicker #beginPicker></md-datepicker>
-          </md-form-field>
-          <md-icon>trending_flat</md-icon>
-          <md-form-field *ngIf="!banner.isDefault">
-            <input mdInput [mdDatepicker]="endPicker" [(ngModel)]="banner.end" name="end" placeholder="Date fin de publication">
-            <md-datepicker-toggle mdSuffix [for]="endPicker"></md-datepicker-toggle>
-            <md-datepicker #endPicker></md-datepicker>
-          </md-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="beginPicker" [(ngModel)]="banner.begin" name="begin"
+                   placeholder="Date début de publication">
+            <mat-datepicker-toggle matSuffix [for]="beginPicker"></mat-datepicker-toggle>
+            <mat-datepicker #beginPicker></mat-datepicker>
+          </mat-form-field>
+          <mat-icon>trending_flat</mat-icon>
+          <mat-form-field *ngIf="!banner.isDefault">
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="banner.end" name="end"
+                   placeholder="Date fin de publication">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
         </div>
       </section>
-
-      <h3>Envoyer pour :</h3>
       <section>
-        <md-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</md-checkbox>
-        <md-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</md-checkbox>
-        <md-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</md-checkbox>
+        <h3>Envoyer pour :</h3>
+        <mat-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</mat-checkbox>
+        <mat-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</mat-checkbox>
+        <mat-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</mat-checkbox>
       </section>
-
-      <h3>Image utilisée :</h3>
-      <section>
+      <section class="img-section">
+        <h3>Image utilisée :</h3>
         <div *ngIf="!this.uploader.isUploading  && uploader.progress !== 100">
-          <button md-button (click)="fileInput.click()">
-                  <md-icon>library_add</md-icon>
-                  <span>Sélectionner</span>
-                  <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader" />
-                </button>
+          <button mat-button (click)="fileInput.click()">
+            <mat-icon>library_add</mat-icon>
+            <span>Sélectionner</span>
+            <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
+          </button>
         </div>
         <div *ngIf="this.uploader.isUploading && uploader.progress !== 100">
-          <md-progress-bar [value]="uploader.progress" [mode]="determinate"></md-progress-bar>
+          <mat-progress-bar [value]="uploader.progress" [mode]="'determinate'"></mat-progress-bar>
         </div>
-        <div>
-          <img [src]="banner.path">
+        <div class="img-container" [style.background-image]="'url(' + banner.path + ')'">
         </div>
       </section>
     </form>
-  </md-card-content>
-  <button md-raised-button color="primary" (click)="saveBanner()">Valider</button>
-</md-card>
+  </mat-card-content>
+  <button mat-raised-button color="primary" (click)="saveBanner()">Valider</button>
+</mat-card>

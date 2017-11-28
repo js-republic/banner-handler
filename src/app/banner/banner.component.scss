@@ -1,18 +1,16 @@
 :host {
   display: flex;
+  flex:1;
   flex-direction: column;
-  md-sidenav-container {
+  mat-sidenav-container {
     flex: 1;
 
-    md-sidenav {
+    mat-sidenav {
       display: flex;
       flex-direction: column;
-      banner-form {
-        flex: 1;
-      }
     }
 
-    md-card {
+    mat-card {
       margin: 20px;
       .banners {
         width: 100%;
