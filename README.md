@@ -37,7 +37,7 @@ L'OAuth Google pour fonctionner renvoie sur une url publique (le fameux `GOOGLE_
  accessible depuis les serveurs Google. Dés lors, il parait compliqué  de s'authentifier
 depuis son poste local.
 
-Pour autant, on peut d'utiliser un outil d'exposition DNS publique depuis sa machine de
+Pour autant, on peut utiliser un outil d'exposition DNS publique depuis sa machine de
 développement, comme par exemple [Ngrok](https://ngrok.com/), [localtunnel](https://localtunnel.github.io/www/).
 
 Si on choisit Ngrok, il suffit alors de lancer la commande qui suit dans un terminal séparé.
@@ -48,7 +48,7 @@ ngrok http {PORT}
 
 ![ngrok in action](../doc/ngrok.png)
 
-Puis, ajouter les dommaines autorisés sur la [console Google API](https://console.cloud.google.com/apis/credentials/oauthclient) pour autoriser l'url temporaire de Ngrok
+Puis, ajouter les domaines autorisés sur la [console Google API](https://console.cloud.google.com/apis/credentials/oauthclient) pour autoriser l'url temporaire de Ngrok
 (`https://42b1ca5d.ngrok.io` dans notre exemple).
 Il faudra aussi mettre à jour la variable `GOOGLE_CALLBACK_URL` du fichier `.env` en conséquence.
 
