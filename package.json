@@ -51,7 +51,6 @@
     "per-env": "^1.0.2",
     "rxjs": "^5.4.2",
     "serve-static": "^1.13.1",
-    "session-memory-store": "^0.2.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

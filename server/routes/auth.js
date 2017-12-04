@@ -2,7 +2,6 @@ const passport = require("passport");
 const router = require("express").Router();
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const session = require("express-session");
-const MemoryStore = require("session-memory-store")(session);
 
 const env = require('../env');
 
@@ -39,7 +38,6 @@ module.exports = {
       name: 'JSESSION',
       cookie: {maxAge: 60000},
       secret: 'js-republic secret',
-      store: new MemoryStore({}),
       resave: false,
       saveUninitialized: false
     }));
@@ -48,6 +46,7 @@ module.exports = {
     app.use("/auth", router);
   },
   ensureAuthenticated(req, res, next) {
+
     if (req.isAuthenticated()) {
       return next();
     }
