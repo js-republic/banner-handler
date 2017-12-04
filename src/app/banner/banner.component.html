@@ -25,13 +25,14 @@
         <tbody>
           <tr *ngFor="let b of banners">
             <td><img [src]="b.path" ></td>
-            <td>{{b.begin | date: 'dd/MM/yyyy'}}</td>
-            <td>{{b.end | date: 'dd/MM/yyyy'}}</td>
+            <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
+            <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
             <td>{{b.companies | aliciaKeys}}</td>
             <td>{{b.isDefault}}</td>
             <td><button mat-button color="warn" (click)="deleteBanner(b)">Supprimer</button></td>
           </tr>
         </tbody>
+
       </table>
       <div *ngIf="!banners.length">Aucune bannière</div>
     </mat-card-content>

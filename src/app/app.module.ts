@@ -1,23 +1,3 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgModule, LOCALE_ID} from '@angular/core';
-
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-
-import {AppComponent} from './app.component';
-
-import {LoginComponent} from './login/login.component';
-
-import {BannerService} from './banner/banner.service';
-import {BannerDataSource} from './banner/banner.datasource';
-import {AliciaKeys} from './banner/aliciakeys.pipe';
-import {BannerComponent} from './banner/banner.component';
-
-import {FileUploadModule} from 'ng2-file-upload';
-
-import {RouterModule, Routes} from '@angular/router';
-
 import {
   MatButtonModule,
   MatDatepickerModule,
@@ -33,10 +13,32 @@ import {
   MatProgressBarModule,
   MatSidenavModule
 } from '@angular/material';
+
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterModule, Routes} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgModule, LOCALE_ID} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+
+import {MomentModule} from 'angular2-moment';
+import {FileUploadModule} from 'ng2-file-upload';
+
+import {AppComponent} from './app.component';
+
+import {LoginComponent} from './login/login.component';
 import {FormComponent} from './banner/form/form.component';
-import {AuthGard} from './auth/auth.guard';
+import {BannerComponent} from './banner/banner.component';
+
+import {BannerService} from './banner/banner.service';
 import {AuthService} from './auth/auth.service';
 
+import {BannerDataSource} from './banner/banner.datasource';
+
+/* The best */
+import {AliciaKeys} from './banner/aliciakeys.pipe';
+
+import {AuthGard} from './auth/auth.guard';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -68,7 +70,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       // {enableTracing: true} // <-- debugging purposes only
-    )
+    ),
+    MomentModule
   ],
   providers: [
     BannerService,

@@ -50,6 +50,8 @@ export class FormComponent implements OnInit {
     // overide the onCompleteItem property of the uploader so we are
     // able to deal with the server response.
     this.uploader.onCompleteItem = (item, response, status, headers) => {
+
+      console.log('response', response);
       const img = JSON.parse(response).data;
       this.banner.path = '/assets/banners/' + img;
     };
