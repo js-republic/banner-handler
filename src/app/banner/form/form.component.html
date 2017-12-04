@@ -1,0 +1,49 @@
+<mat-card>
+  <h3>Ajouter une bannière</h3>
+  <mat-card-content>
+    <form class="banner-form" action="#">
+      <section class="usage-periode-container">
+        <h3>Période d'utilisation :</h3>
+        <mat-checkbox name="is-default" [(ngModel)]="banner.isDefault">Tout le temps</mat-checkbox>
+        <div *ngIf="!banner.isDefault">
+          <p style="font-weight:bold">- OU -</p>
+          <mat-form-field>
+            <input matInput [matDatepicker]="beginPicker" [(ngModel)]="banner.begin" name="begin"
+                   placeholder="Date début de publication">
+            <mat-datepicker-toggle matSuffix [for]="beginPicker"></mat-datepicker-toggle>
+            <mat-datepicker #beginPicker></mat-datepicker>
+          </mat-form-field>
+          <mat-icon>trending_flat</mat-icon>
+          <mat-form-field *ngIf="!banner.isDefault">
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="banner.end" name="end"
+                   placeholder="Date fin de publication">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </section>
+      <section>
+        <h3>Envoyer pour :</h3>
+        <mat-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</mat-checkbox>
+        <mat-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</mat-checkbox>
+        <mat-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</mat-checkbox>
+      </section>
+      <section class="img-section">
+        <h3>Image utilisée :</h3>
+        <div *ngIf="!this.uploader.isUploading  && uploader.progress !== 100">
+          <button mat-button (click)="fileInput.click()">
+            <mat-icon>library_add</mat-icon>
+            <span>Sélectionner</span>
+            <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
+          </button>
+        </div>
+        <div *ngIf="this.uploader.isUploading && uploader.progress !== 100">
+          <mat-progress-bar [value]="uploader.progress" [mode]="'determinate'"></mat-progress-bar>
+        </div>
+        <div class="img-container" [style.background-image]="'url(' + banner.path + ')'">
+        </div>
+      </section>
+    </form>
+  </mat-card-content>
+  <button mat-raised-button color="primary" (click)="saveBanner()">Valider</button>
+</mat-card>

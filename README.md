@@ -1,28 +1,56 @@
-# Bannerhandler
+Email banner handler
+---
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.0.
+### Comment démarrer ?
 
-## Development server
+Tout d'abord, il vous faudra créer un fichier `.env` à la racine du projet. 
+Ce fichier va contenir toutes les variables d'environement (secrètes pour certaines) de 
+l'applicaiton. Ce fichier n'est donc pas commité.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Vous pouvez partir de ce template pour créer le fichier :
 
-## Code scaffolding
+```
+PORT=3000
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=
+GOOGLE_ALLOWED_USERS={"userIds":[111]}
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+`PORT` représente le port sur lequel le serveur web va démarrer. La valeur des variables `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` et `GOOGLE_CALLBACK_URL`
+sont à retrouver depuis la configuration de la console Google API (https://console.cloud.google.com/apis/credentials/oauthclient).
+Ces valeurs sont nécessaires au fonctionement de l'authentification via un compte Google.
+Bien qu'obligatoire, `GOOGLE_ALLOWED_USERS` n'est pour l'instant pas encore vraiment utilisé. 
 
-## Build
+Une fois ce fichier dûment créé et remplit, on poursuivra les étapes habituelles :
+```
+yarn
+yarn start
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+L'application devrait alors être visible sur `http://localhost:{PORT}`, la valeur du `PORT` 
+étant celui définit dans le fichier `.env`. 
 
-## Running unit tests
+### Comment s'authentifier en local avec l'OAuth Google
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+L'OAuth Google pour fonctionner renvoie sur une url publique (le fameux `GOOGLE_CALLBACK_URL`)
+ accessible depuis les serveurs Google. Dés lors, il parait compliqué  de s'authentifier
+depuis son poste local.
 
-## Running end-to-end tests
+Pour autant, on peut utiliser un outil d'exposition DNS publique depuis sa machine de
+développement, comme par exemple [Ngrok](https://ngrok.com/), [localtunnel](https://localtunnel.github.io/www/).
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+Si on choisit Ngrok, il suffit alors de lancer la commande qui suit dans un terminal séparé.
 
-## Further help
+```
+ngrok http {PORT}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+![ngrok in action](../doc/ngrok.png)
+
+Puis, ajouter les domaines autorisés sur la [console Google API](https://console.cloud.google.com/apis/credentials/oauthclient) pour autoriser l'url temporaire de Ngrok
+(`https://42b1ca5d.ngrok.io` dans notre exemple).
+Il faudra aussi mettre à jour la variable `GOOGLE_CALLBACK_URL` du fichier `.env` en conséquence.
+
+Enfin, il ne reste plus qu'à ce rendre sur l'url Ngrok, `https://42b1ca5d.ngrok.io` dans notre exemple.
+

@@ -1,43 +1,39 @@
-import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-import { Observable } from 'rxjs/Rx';
+import {Observable} from 'rxjs/Rx';
 
-import { Banner } from './banner.model';
+import {Banner} from './banner.model';
 
 @Injectable()
 export class BannerService {
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     this.loadBanners();
   }
 
-  deleteBanner(banner:Banner) {
+  deleteBanner(banner: Banner) {
     return this.http.delete(`/banner/${banner.id}`);
   }
 
-  loadBanners () {
-
-    return this.http.get('/banner')
-      .map((res:Response) => res.json());
+  loadBanners(): Observable<Banner[]> {
+    return this.http.get<Banner[]>('/banner');
   }
 
   saveBanner(banner): Observable<Banner> {
 
-  	return this.http
-      .post("/banner", banner)
-      .map((res: Response) => res.json());
+    return this.http
+      .post<Banner>('/banner', banner);
   }
 
   uploadBanner(data) {
 
-  	this.http
-        .post("/upload", data)
-        .map((res: Response) => res.json())
-        .subscribe(
-          success => console.log(success._body),
-          error => console.error(error)
-        );
+    this.http
+      .post('/upload', data)
+      .subscribe(
+        success => console.log(success),
+        error => console.error(error)
+      );
   }
 
 }

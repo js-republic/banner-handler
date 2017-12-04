@@ -1,31 +1,31 @@
 const express = require("express");
 const path = require("path");
 const bannerCtrl = require("../controllers/banner");
-const auth = require("../auth");
+const {ensureAuthenticated} = require('./auth');
 
 const router = express.Router();
 const PUBLIC_PATH = `${__dirname}/../../dist/`;
 
 /**
- *	Returns all banners
+ *  Returns all banners
  */
-router.get("/", auth.secured(), (req, res) => {
+router.get("/", ensureAuthenticated, (req, res) => {
   res.json(bannerCtrl.getBannersArray());
 });
 
 /**
- *	Inserts a new banner into existing ones
+ *  Inserts a new banner into existing ones
  */
-router.post("/", auth.secured(), (req, res) => {
+router.post("/", ensureAuthenticated, (req, res) => {
   bannerCtrl.insertBanner(req.body).then(banner => {
-    res.status(201).send({ banner });
+    res.status(201).send({banner});
   });
 });
 
 /**
- *	Delete given banner
+ *  Delete given banner
  */
-router.delete("/:id", auth.secured(), (req, res) => {
+router.delete("/:id", ensureAuthenticated, (req, res) => {
   const id = req.params.id;
   try {
     bannerCtrl.deleteBanner(id);
@@ -36,7 +36,7 @@ router.delete("/:id", auth.secured(), (req, res) => {
 });
 
 /**
- *	Returns a random banner given the current date
+ *  Returns a random banner given the current date
  */
 router.get("/random", (req, res) => {
   bannerCtrl
@@ -56,16 +56,16 @@ router.get("/random", (req, res) => {
 });
 
 /**
- *	Handles banner picture upload
+ *  Handles banner picture upload
  */
-router.post("/upload", auth.secured(), (req, res) => {
+router.post("/upload", ensureAuthenticated, (req, res) => {
   const bannerFolder = `${PUBLIC_PATH}/assets/banners/`;
   req.pipe(req.busboy);
 
   req.busboy.on("file", (fieldname, file, filename) => {
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
-      .then(newFilename => res.send({ data: newFilename }));
+      .then(newFilename => res.send({data: newFilename}));
   });
 });
 

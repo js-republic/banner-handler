@@ -1,71 +1,46 @@
-<md-card>
-  <h2>Bannières</h2>
+<mat-sidenav-container>
+  <mat-card>
+    <mat-card-content>
+      <h2>Bannières</h2>
+      <table class="banners" *ngIf="banners.length">
+        <thead>
+          <tr>
+            <th>Bannière</th>
+            <th (click)="sortBanners('begin')">
+              <div class="sortable">
+                <mat-icon>sort</mat-icon><span>Date de début</span>
+              </div>
+            </th>
+            <th (click)="sortBanners('end')">
+              <div class="sortable">
+                <mat-icon>sort</mat-icon><span>Date de fin</span>
+              </div>
+            </th>
+            <th>Envoyer pour</th>
+            <th>Tout le temps</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-   <table class="banners" *ngIf="banners.length">
-     <thead>
-         <tr>
-           <th>Bannière</th>
-           <th (click)="sortBanners('begin')">Date de début</th>
-           <th (click)="sortBanners('end')">Date de fin</th>
-           <th>Envoyer pour</th>
-           <th>Par défaut</th>
-           <th>Actions</th>
-         </tr>
-     </thead>
+        <tbody>
+          <tr *ngFor="let b of banners">
+            <td><img [src]="b.path" ></td>
+            <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
+            <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
+            <td>{{b.companies | aliciaKeys}}</td>
+            <td>{{b.isDefault}}</td>
+            <td><button mat-button color="warn" (click)="deleteBanner(b)">Supprimer</button></td>
+          </tr>
+        </tbody>
 
-     <tbody>
-       <tr *ngFor="let b of banners">
-         <td><img [src]="b.path" alt=""></td>
-         <td>{{b.begin | date: 'dd/MM/yyyy'}}</td>
-         <td>{{b.end | date: 'dd/MM/yyyy'}}</td>
-         <td>{{b.companies | aliciaKeys}}</td>
-         <td>{{b.isDefault}}</td>
-         <td><button (click)="deleteBanner(b)" md-button>Supprimer</button></td>
-       </tr>
-     </tbody>
-   </table>
-   <div *ngIf="!banners.length">Aucune bannière</div>
-
-</md-card>
-
-<md-card>
-  <h2>Add a banner</h2>
-
-  <form class="banner-form" action="#">
-
-      <section>
-        <md-checkbox name="is-default" [(ngModel)]="banner.isDefault">Tout le temps</md-checkbox>
-      </section>
-
-      <md-form-field *ngIf="!banner.isDefault">
-          <input mdInput [mdDatepicker]="beginPicker" [(ngModel)]="banner.begin" name="begin" placeholder="Date début de publication">
-          <md-datepicker-toggle mdSuffix [for]="beginPicker"></md-datepicker-toggle>
-          <md-datepicker #beginPicker></md-datepicker>
-      </md-form-field>
-
-      <md-form-field *ngIf="!banner.isDefault">
-          <input mdInput [mdDatepicker]="endPicker" [(ngModel)]="banner.end" name="end" placeholder="Date fin de publication">
-          <md-datepicker-toggle mdSuffix [for]="endPicker"></md-datepicker-toggle>
-          <md-datepicker #endPicker></md-datepicker>
-      </md-form-field>
-
-      <h3>Envoyer pour :</h3>
-      <section>
-        <md-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</md-checkbox>
-        <md-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</md-checkbox>
-        <md-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</md-checkbox>
-      </section>
-
-      <button md-button (click)="fileInput.click()">
-        <md-icon>library_add</md-icon>
-        <span>Sélectionnez une bannière</span>
-        <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader" />
-      </button>
-
-      <div>
-          <img [src]="banner.path">
-      </div>
-
-      <button md-button (click)="saveBanner()">Valider</button>
-  </form>
-</md-card>
+      </table>
+      <div *ngIf="!banners.length">Aucune bannière</div>
+    </mat-card-content>
+  </mat-card>
+  <button mat-mini-fab class="add-banner-floating-btn" (click)="createNewBanner()">
+      <mat-icon>add</mat-icon>
+  </button>
+  <mat-sidenav #sidenav mode="over" class="banner-form-card">
+    <app-banner-form (added)="onBannerAdded()" [newBanner]="newBanner"></app-banner-form>
+  </mat-sidenav>
+</mat-sidenav-container>

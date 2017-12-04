@@ -1,68 +1,86 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from "@angular/core";
+import {
+  MatButtonModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatToolbarModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule,
+  MatTableModule,
+  MatSortModule,
+  MatCheckboxModule,
+  MatProgressBarModule,
+  MatSidenavModule
+} from '@angular/material';
 
-import { FormsModule } from "@angular/forms";
-import { HttpModule } from "@angular/http";
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterModule, Routes} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgModule, LOCALE_ID} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
-import { AppComponent } from "./app.component";
+import {MomentModule} from 'angular2-moment';
+import {FileUploadModule} from 'ng2-file-upload';
 
-import { LoginComponent } from "./login/login.component";
+import {AppComponent} from './app.component';
 
-import { BannerService } from "./banner/banner.service";
-import { BannerDataSource } from "./banner/banner.datasource";
-import { AliciaKeys } from "./banner/aliciakeys.pipe";
-import { BannerComponent } from "./banner/banner.component";
+import {LoginComponent} from './login/login.component';
+import {FormComponent} from './banner/form/form.component';
+import {BannerComponent} from './banner/banner.component';
 
-import { FileUploadModule } from "ng2-file-upload";
+import {BannerService} from './banner/banner.service';
+import {AuthService} from './auth/auth.service';
 
-import { RouterModule, Routes } from "@angular/router";
+import {BannerDataSource} from './banner/banner.datasource';
+
+/* The best */
+import {AliciaKeys} from './banner/aliciakeys.pipe';
+
+import {AuthGard} from './auth/auth.guard';
 
 const appRoutes: Routes = [
-  { path: "login", component: BannerComponent },
-  { path: "main", component: LoginComponent },
-  { path: '', redirectTo: '/main', pathMatch: 'full'}
+  {path: 'login', component: LoginComponent},
+  {path: 'main', component: BannerComponent, canActivate: [AuthGard]},
+  {path: '', redirectTo: '/main', pathMatch: 'full'}
 ];
 
-import {
-  MdButtonModule,
-  MdDatepickerModule,
-  MdNativeDateModule,
-  MdToolbarModule,
-  MdCardModule,
-  MdFormFieldModule,
-  MdInputModule,
-  MdIconModule,
-  MdTableModule,
-  MdSortModule,
-  MdCheckboxModule
-} from "@angular/material";
-
 @NgModule({
-  declarations: [AppComponent, BannerComponent, LoginComponent, AliciaKeys],
+  declarations: [AppComponent, BannerComponent, LoginComponent, AliciaKeys, FormComponent],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
-    MdButtonModule,
-    MdDatepickerModule,
-    MdNativeDateModule,
-    MdToolbarModule,
-    MdCardModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdIconModule,
-    MdTableModule,
-    MdSortModule,
-    MdCheckboxModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatProgressBarModule,
     FileUploadModule,
+    MatSidenavModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
-    )
+      // {enableTracing: true} // <-- debugging purposes only
+    ),
+    MomentModule
   ],
-  providers: [BannerService, BannerDataSource],
+  providers: [
+    BannerService,
+    BannerDataSource,
+    AuthGard,
+    AuthService,
+    {provide: LOCALE_ID, useValue: 'fr-FR'}
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
