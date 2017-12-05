@@ -1,5 +1,7 @@
 <mat-toolbar color="primary">
     <span>Gestionnaire de bannière d'Email</span>
+
+    <app-user-infos *ngIf="isLogged" [username]="user.username" [imgURL]="user.imgURL"></app-user-infos>
 </mat-toolbar>
 <div class="app-content">
   <router-outlet></router-outlet>
