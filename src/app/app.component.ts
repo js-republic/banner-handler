@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 
-import { UserService } from './services/user.service';
+import { AuthService } from './auth/auth.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    providers: [UserService]
+    providers: [AuthService]
 })
 
 export class AppComponent {
-  user = {};
+  user:any = {};
 
   public isLogged = false;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
@@ -35,9 +35,10 @@ export class AppComponent {
   }
 
   setUser() {
-    this.userService.loadUser().subscribe(res => {
-      this.user.username = res.name;
-      this.user.imgURL = res.avatar;
-    });
+    this.authService.getUser()
+      .then(res => {
+        this.user.username = res.name;
+        this.user.imgURL = res.avatar;
+      });
   }
 }

@@ -27,7 +27,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {AppComponent} from './app.component';
 
 import {LoginComponent} from './login/login.component';
-import {UserComponent} from './user/user.component';
+import {UserInfosComponent} from './user-infos/user-infos.component';
 import {FormComponent} from './banner/form/form.component';
 import {BannerComponent} from './banner/banner.component';
 
@@ -49,7 +49,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, BannerComponent, UserComponent, LoginComponent, AliciaKeys, FormComponent],
+  declarations: [AppComponent, BannerComponent, UserInfosComponent, LoginComponent, AliciaKeys, FormComponent],
   imports: [
     BrowserModule,
     FormsModule,
