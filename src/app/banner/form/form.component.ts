@@ -26,7 +26,7 @@ export class FormComponent implements OnInit {
   }
 
   public banner: Banner;
-
+  public picToUpload = null;
   public uploader: FileUploader;
 
   constructor(private bannerService: BannerService, private el: ElementRef) {
@@ -44,7 +44,8 @@ export class FormComponent implements OnInit {
     // override the onAfterAddingfile property of the uploader so it doesn't authenticate with //credentials.
     this.uploader.onAfterAddingFile = file => {
       file.withCredentials = false;
-      this.uploader.uploadAll();
+      this.showPreviewPicture(file);
+      // this.uploader.uploadAll();
     };
 
     // overide the onCompleteItem property of the uploader so we are
@@ -54,31 +55,37 @@ export class FormComponent implements OnInit {
       console.log('response', response);
       const img = JSON.parse(response).data;
       this.banner.path = '/assets/banners/' + img;
+
+      this.bannerService.saveBanner(this.banner).subscribe(() => {
+        this.added.emit();
+      });
     };
   }
 
-  upload() {
-    const inputEl: HTMLInputElement = this.el.nativeElement.querySelector(
-      '#picture'
-    );
+  showPreviewPicture(picture) {
 
-    const fileCount: number = inputEl.files.length;
-    const formData = new FormData();
+    const reader = new FileReader();
 
-    if (fileCount > 0) {
-      formData.append('picture', inputEl.files.item(0));
-      this.bannerService.uploadBanner(formData);
-    }
+    reader.onload = (e: any) => {
+      this.banner.path = e.target.result;
+    };
+
+    const element: any = document.querySelector(".upload-picture");
+
+    picture = element.files[0];
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(picture);
   }
 
   saveBanner() {
+
     if (this.banner.isDefault) {
       this.banner.begin = null;
       this.banner.end = null;
     }
-    this.bannerService.saveBanner(this.banner).subscribe(() => {
-      this.added.emit();
-    });
+
+    this.uploader.uploadAll();
   }
 
   onCompaniesCkChange(companyName) {

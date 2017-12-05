@@ -34,7 +34,7 @@
           <button mat-button (click)="fileInput.click()">
             <mat-icon>library_add</mat-icon>
             <span>Sélectionner</span>
-            <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
+            <input class="upload-picture" #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
           </button>
         </div>
         <div *ngIf="this.uploader.isUploading && uploader.progress !== 100">
