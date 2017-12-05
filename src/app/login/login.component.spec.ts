@@ -1,14 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MatCardModule } from '@angular/material';
+
 import { LoginComponent } from './login.component';
 
+const declarations = [
+  LoginComponent
+];
+
+const imports = [
+  MatCardModule
+];
+
 describe('LoginComponent', () => {
+
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      imports,
+      declarations
     })
     .compileComponents();
   }));

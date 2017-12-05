@@ -90,7 +90,7 @@ class BannerController {
 
         return new Promise((resolve, reject) => {
 
-            mkdirp(bannerFolder, function (err) {
+            mkdirp(bannerFolder, (err) => {
 
                 if(err) console.error(err);
 
