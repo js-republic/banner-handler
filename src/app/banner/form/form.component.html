@@ -82,5 +82,5 @@
     </form>
   </mat-card-content>
 
-  <button mat-raised-button color="primary" (click)="saveBanner()">Valider</button>
+  <button class="save-banner" mat-raised-button color="primary" [disabled]="canShowSaveButton()" (click)="saveBanner()">Valider</button>
 </mat-card>

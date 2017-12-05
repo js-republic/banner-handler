@@ -78,12 +78,53 @@ describe('FormComponent', () => {
     fixture = TestBed.createComponent(FormComponent);
     component = fixture.componentInstance;
 
-
     component.banner = new Banner();
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it(`should hide button creating banner && have no picture preview while no file is uploaded.
+    Button should be clickable and preview displayed when file uploaded.`, () => {
+
+    const btnClassName = '.save-banner';
+    const imgClassName = '.img-container';
+
+    const imgTestPath = '/assets/test/test.jpg';
+
+    let compiled;
+    let buttonSave;
+    let imgPreview;
+
+    function expectResult({attr, img}) {
+
+      compiled = fixture.debugElement.nativeElement;
+
+      buttonSave = compiled.querySelector(btnClassName).getAttribute('disabled');
+      imgPreview = compiled.querySelector(imgClassName).style.backgroundImage;
+
+      expect(buttonSave).toBe(attr);
+      expect(imgPreview).toBe(img);
+    }
+
+    fixture.detectChanges();
+
+    expectResult({
+      attr: '', 
+      img: ''
+    });
+
+    // Here we consider that picture has been loaded.
+    // So the button should not be disabled anymore
+    component.pictureLoaded = true;
+    component.setBannerPath(imgTestPath);
+    fixture.detectChanges();
+
+    expectResult({
+      attr: null, 
+      img: 'url("' + imgTestPath + '")'
+    });
   });
 });

@@ -26,7 +26,7 @@ export class FormComponent implements OnInit {
   }
 
   public banner: Banner;
-  public picToUpload = null;
+  public pictureLoaded: boolean = false;
   public uploader: FileUploader;
 
   constructor(private bannerService: BannerService, private el: ElementRef) {
@@ -66,10 +66,16 @@ export class FormComponent implements OnInit {
     const picture = element.files[0];
 
     reader.onload = (e: any) => {
-      this.banner.path = e.target.result;
+      this.setBannerPath(e.target.result);
     };
 
     reader.readAsDataURL(picture);
+
+    this.pictureLoaded = true;
+  }
+
+  setBannerPath(path) {
+    this.banner.path = path;
   }
 
   handleBannerPeriod() {
@@ -105,7 +111,12 @@ export class FormComponent implements OnInit {
   }
 
   getBannerPath(): string {
-    return 'url(' + this.banner.path + ')';
+
+    if(this.banner && this.banner.path) {
+      return 'url(' + this.banner.path + ')';
+    }
+
+    return '';    
   }
 
   get imageStatus(): string {
@@ -114,5 +125,9 @@ export class FormComponent implements OnInit {
     } else {
       return 'imgChoosedState';
     }
+  }
+
+  canShowSaveButton() {
+    return !this.pictureLoaded;
   }
 }
