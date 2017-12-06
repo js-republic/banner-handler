@@ -11,7 +11,7 @@ describe('Banner Handler App', () => {
     page.setStorage('testEnv', '');
   });
 
-  it('should display login page if unauthenticated', () => {
+  xit('should display login page if unauthenticated', () => {
 
     const pageTitle = page.select('mat-toolbar span').getText();
     const authComponent = page.select('app-login');
@@ -50,16 +50,18 @@ describe('Banner Handler App', () => {
     const formClass = '.banner-form-card';
     const btnClass = '.add-banner-floating-btn';
 
+    // First form should be hidden
     let form = page.select(formClass);
     expect(form.getCssValue('visibility')).toBe('hidden');
 
     page.select(btnClass).click();
 
+    // After click form should be visible
     form = page.select(formClass);
     expect(form.getCssValue('visibility')).toBe('visible');
   });
 
-  it("should pre-upload a picture and display it in preview in form", () => {
+  it("should pre-upload a picture and display it in preview in form", (done) => {
 
     const previewClass = '.img-container';
 
@@ -74,12 +76,14 @@ describe('Banner Handler App', () => {
     const fileToUpload = '../src/assets/test/test.jpg';
     const absolutePath = path.resolve(__dirname, fileToUpload);
 
-    page.select('.upload-btn').sendKeys(absolutePath);
-    page.select('.upload-btn').click();
+    page.select('.upload-btn input').sendKeys(absolutePath);
+    page.select('.upload-btn input').click();
 
     // Then we check the preview
+    // We have to wait because reader.onload function is async
     setTimeout(() => {
-      expect(page.select(previewClass).getCssValue('background-image').toBe('none');
-    }, 5000);
+      expect(page.select(previewClass).getCssValue('background-image')).toContain('url("data:image/jpeg;base64,');
+      done();
+    }, 2000);
   });
 });
