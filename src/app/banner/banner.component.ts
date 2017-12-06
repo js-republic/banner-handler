@@ -48,6 +48,7 @@ export class BannerComponent implements OnInit {
   }
 
   sortBanners(propertyName) {
+
     Object.entries(this.sortStatus).forEach(([key, value]) => {
       if (propertyName !== key) {
         this.sortStatus[key] = '';
@@ -83,6 +84,18 @@ export class BannerComponent implements OnInit {
 
       return result;
     });
+  }
+
+  getArrowState(key) {
+
+    let icon = 'arrow_drop_up';
+
+    if ( this.sortStatus[key] === 'asc' ) {
+      icon = 'arrow_drop_down';
+    }
+
+    return icon;
+
   }
 
   deleteBanner(b) {
