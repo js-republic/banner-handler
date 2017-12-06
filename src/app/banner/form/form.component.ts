@@ -55,6 +55,8 @@ export class FormComponent implements OnInit {
     };
 
     this.uploader.onCompleteItem = (item, response, status, headers) => {
+      const img = JSON.parse(response).data;
+      this.banner.path = '/assets/banners/' + img;
       this.registerBanner();
     };
   }
@@ -116,7 +118,7 @@ export class FormComponent implements OnInit {
       return 'url(' + this.banner.path + ')';
     }
 
-    return '';    
+    return '';
   }
 
   get imageStatus(): string {
@@ -129,5 +131,10 @@ export class FormComponent implements OnInit {
 
   canShowSaveButton() {
     return !this.pictureLoaded;
+  }
+
+  inputCanBeShown() {
+    const testEnv = localStorage.getItem('testEnv');
+    return testEnv && testEnv === 'true';
   }
 }

@@ -11,7 +11,7 @@ describe('Banner Handler App', () => {
     page.setStorage('testEnv', '');
   });
 
-  xit('should display login page if unauthenticated', () => {
+  it('should display login page if unauthenticated', () => {
 
     const pageTitle = page.select('mat-toolbar span').getText();
     const authComponent = page.select('app-login');
@@ -81,9 +81,10 @@ describe('Banner Handler App', () => {
 
     // Then we check the preview
     // We have to wait because reader.onload function is async
-    setTimeout(() => {
+
+    browser.wait(page.select(previewClass).isDisplayed(), 2000).then(() => {
       expect(page.select(previewClass).getCssValue('background-image')).toContain('url("data:image/jpeg;base64,');
       done();
-    }, 2000);
+    });
   });
 });

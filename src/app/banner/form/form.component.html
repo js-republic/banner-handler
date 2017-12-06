@@ -3,7 +3,7 @@
 
   <mat-card-content>
     <form class="banner-form" action="#">
-      
+
       <!-- Period -->
       <section class="usage-periode-container">
         <h3>Période d'utilisation :</h3>
@@ -39,7 +39,7 @@
           </mat-form-field>
         </div>
       </section>
-      
+
       <!-- Companies -->
       <section>
         <h3>Envoyer pour :</h3>
@@ -47,7 +47,7 @@
         <mat-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</mat-checkbox>
         <mat-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</mat-checkbox>
       </section>
-      
+
       <!-- Picture -->
       <section class="img-section">
         <h3>Image utilisée :</h3>
@@ -62,6 +62,7 @@
             <input
               class="upload-picture"
               type="file"
+              [hidden]="!inputCanBeShown()"
               name="picture"
               #fileInput
               ng2FileSelect
@@ -75,7 +76,7 @@
           <mat-progress-bar [value]="uploader.progress" [mode]="'determinate'"></mat-progress-bar>
         </div>
 
-        <div class="img-container" [style.background-image]="getBannerPath()"></div>
+        <div class="img-container" [hidden]="!banner.path" [style.background-image]="getBannerPath()"></div>
       </section>
 
     </form>
