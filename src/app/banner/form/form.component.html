@@ -55,7 +55,7 @@
         <!-- Uploader -->
         <div *ngIf="!this.uploader.isUploading  && uploader.progress !== 100">
 
-          <button mat-button (click)="fileInput.click()">
+          <button class="upload-btn" mat-button (click)="fileInput.click()">
 
             <mat-icon>library_add</mat-icon>
             <span>Sélectionner</span>
