@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
+import * as moment from 'moment';
 
 import {Banner} from '../banner.model';
 import {BannerService} from '../banner.service';
@@ -27,7 +28,12 @@ export class FormComponent implements OnInit {
 
   public banner: Banner;
   public pictureLoaded: boolean = false;
+
   public uploader: FileUploader;
+
+  public isDateBeginAfterDateEnd = true;
+  public isAtLeastOneCompany = true;
+  public isBannerImagePresent = true;
 
   constructor(private bannerService: BannerService, private el: ElementRef) {
     this.initUploader();
@@ -76,32 +82,77 @@ export class FormComponent implements OnInit {
     this.pictureLoaded = true;
   }
 
-  setBannerPath(path) {
-    this.banner.path = path;
-  }
+  saveBanner() {
 
-  handleBannerPeriod() {
+    // Si la bannière n'est pas affiché tout le temps,
+    // les deux champs date doivent être remplie au bon format
+    const isShowedAllTime = this.banner.isDefault;
+    const date_debut = moment(this.banner.begin);
+    const date_fin = moment(this.banner.end);
+    if (
+      !isShowedAllTime &&
+      date_debut.isValid() &&
+      date_fin.isValid()
+    ) {
+
+      // La date de début doit être inférieur à la date de fin
+      // Si date_debut est après date_fin, print un message d'erreur
+      if ( date_debut.isAfter(date_fin) ) {
+        this.isDateBeginAfterDateEnd = false;
+      } else {
+        this.isDateBeginAfterDateEnd = true;
+      }
+
+    }
+
+    // Au moins une entreprise doit être sélectionnée
+    const isPresentCompaniesList = this.banner.companies;
+    let sum = 0;
+    Object.values(isPresentCompaniesList).map(isPresent => {
+      if ( isPresent === false ) sum++;
+    });
+    // Si sum vaut 3, print un message d'erreur
+    if ( sum === 3 ) {
+      this.isAtLeastOneCompany = false;
+    } else {
+      this.isAtLeastOneCompany = true;
+    }
+
+    // Une image doit être choisie
+    const imagePath = this.banner.path;
+    // Si imagePath est vide, print un message d'erreur
+    if ( imagePath === '' ) {
+      this.isBannerImagePresent = false;
+    } else {
+      this.isBannerImagePresent = true;
+    }
 
     if (this.banner.isDefault) {
       this.banner.begin = null;
       this.banner.end = null;
     }
-  }
 
-  saveBanner() {
+    if (
+      this.isDateBeginAfterDateEnd &&
+      this.isAtLeastOneCompany &&
+      this.isBannerImagePresent
+    ) {
+      // This event calls this.uploader.onCompleteItem when upload finished
+      // Then this.uploader.onCompleteItem calls registerBanner()
+      this.uploader.uploadAll();
+    }
 
-    this.handleBannerPeriod();
 
-    // This event calls this.uploader.onCompleteItem when upload finished
-    // Then this.uploader.onCompleteItem calls registerBanner()
-    this.uploader.uploadAll();
   }
 
   registerBanner() {
-
     this.bannerService.saveBanner(this.banner).subscribe(() => {
       this.added.emit();
     });
+  }
+
+  setBannerPath(path) {
+    this.banner.path = path;
   }
 
   onCompaniesCkChange(companyName: string) {

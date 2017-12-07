@@ -11,7 +11,7 @@ export class AuthServiceMock extends AuthService {
   	return Promise.resolve({
   		id: '',
   		avatar: '',
-  		username: ''
+  		name: ''
   	});
   }
 }

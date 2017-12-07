@@ -37,6 +37,10 @@
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
+
+          <div *ngIf="!isDateBeginAfterDateEnd" class="error-message">
+            <p>La date de début doit avoir une valeur inférieure à celle de fin.</p>
+          </div>
         </div>
       </section>
 
@@ -46,6 +50,10 @@
         <mat-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</mat-checkbox>
         <mat-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</mat-checkbox>
         <mat-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</mat-checkbox>
+
+        <div *ngIf="!isAtLeastOneCompany" class="error-message">
+          <p>Au moins une des trois entreprises doit être cochée.</p>
+        </div>
       </section>
 
       <!-- Picture -->
@@ -69,6 +77,10 @@
               [uploader]="uploader"
             />
           </button>
+        </div>
+
+        <div *ngIf="!isBannerImagePresent" class="error-message">
+          <p>Vous devez sélectionner une image.</p>
         </div>
 
         <!-- Progress Bar -->
