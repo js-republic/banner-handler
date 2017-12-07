@@ -15,15 +15,16 @@ passport.use(new GoogleStrategy({
     clientSecret: env.GOOGLE_CLIENT_SECRET,
     callbackURL: env.GOOGLE_CALLBACK_URL,
   }, (accessToken, refreshToken, profile, done) => {
-    isUserBelongToAllowedGroup()
-      .then(() => {
+
+    // isUserBelongToAllowedGroup(accessToken, profile.id)
+    //   .then(() => {
         return done(null, {
           id: profile.id,
           name: profile.displayName,
           avatar: profile.photos.shift().value
         });
-      })
-      .catch(e => done(e));
+      // })
+      // .catch(e => done(e));
   })
 );
 
@@ -34,17 +35,29 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 function isUserBelongToAllowedGroup(accessToken, userID) {
-  return axios.get(`https://www.googleapis.com/admin/directory/v1/groups?userKey=${userID}`, {
-    "headers": {
-      "Authorization": `Bearer ${accessToken}`
-    }
-  })
+
+  console.log('accessToken', accessToken);
+  console.log('userID', userID);
+
+  const apiKey = "AIzaSyBwt4FYouaqBaT2sykmhAEo6kLNucs1gJI";
+
+  return axios
+    .get(`https://www.googleapis.com/admin/directory/v1/groups?userKey=${userID}&key=${apiKey}`, {
+      "headers": {
+      }
+    })
     .then(({data: {groups}}) => {
       const foundGroup = groups.find(group => group.email === env.GOOGLE_ALLOWED_GROUP);
+
+      console.log('foundGroup', foundGroup);
+
       if (!foundGroup) {
         throw new Error(`The user doesn't belong to ${env.GOOGLE_ALLOWED_GROUP}`);
       }
       return foundGroup;
+    })
+    .catch(e => {
+      throw new Error(`You don't have the permission to request groups from admin directory`);
     })
 }
 

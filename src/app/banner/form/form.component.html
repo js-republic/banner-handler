@@ -1,22 +1,39 @@
 <mat-card>
   <h3>Ajouter une bannière</h3>
+
   <mat-card-content>
     <form class="banner-form" action="#">
+
+      <!-- Period -->
       <section class="usage-periode-container">
         <h3>Période d'utilisation :</h3>
         <mat-checkbox name="is-default" [(ngModel)]="banner.isDefault">Tout le temps</mat-checkbox>
+
         <div *ngIf="!banner.isDefault">
           <p style="font-weight:bold">- OU -</p>
+
           <mat-form-field>
-            <input matInput [matDatepicker]="beginPicker" [(ngModel)]="banner.begin" name="begin"
-                   placeholder="Date début de publication">
+            <input
+              name="begin"
+              placeholder="Date début de publication"
+              matInput
+              [matDatepicker]="beginPicker"
+              [(ngModel)]="banner.begin"
+            />
             <mat-datepicker-toggle matSuffix [for]="beginPicker"></mat-datepicker-toggle>
             <mat-datepicker #beginPicker></mat-datepicker>
           </mat-form-field>
+
           <mat-icon>trending_flat</mat-icon>
           <mat-form-field *ngIf="!banner.isDefault">
-            <input matInput [matDatepicker]="endPicker" [(ngModel)]="banner.end" name="end"
-                   placeholder="Date fin de publication">
+
+            <input
+              name="end"
+              placeholder="Date fin de publication"
+              matInput
+              [matDatepicker]="endPicker"
+              [(ngModel)]="banner.end"
+            />
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
@@ -26,6 +43,8 @@
           </div>
         </div>
       </section>
+
+      <!-- Companies -->
       <section>
         <h3>Envoyer pour :</h3>
         <mat-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</mat-checkbox>
@@ -36,25 +55,44 @@
           <p>Au moins une des trois entreprises doit être cochée.</p>
         </div>
       </section>
+
+      <!-- Picture -->
       <section class="img-section">
         <h3>Image utilisée :</h3>
+
+        <!-- Uploader -->
         <div *ngIf="!this.uploader.isUploading  && uploader.progress !== 100">
-          <button mat-button (click)="fileInput.click()">
+
+          <button class="upload-btn" mat-button (click)="fileInput.click()">
+
             <mat-icon>library_add</mat-icon>
             <span>Sélectionner</span>
-            <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
+            <input
+              class="upload-picture"
+              type="file"
+              [hidden]="!inputCanBeShown()"
+              name="picture"
+              #fileInput
+              ng2FileSelect
+              [uploader]="uploader"
+            />
           </button>
         </div>
+
         <div *ngIf="!isBannerImagePresent" class="error-message">
           <p>Vous devez sélectionner une image.</p>
         </div>
+
+        <!-- Progress Bar -->
         <div *ngIf="this.uploader.isUploading && uploader.progress !== 100">
           <mat-progress-bar [value]="uploader.progress" [mode]="'determinate'"></mat-progress-bar>
         </div>
-        <div class="img-container" [style.background-image]="'url(' + banner.path + ')'">
-        </div>
+
+        <div class="img-container" [hidden]="!banner.path" [style.background-image]="getBannerPath()"></div>
       </section>
+
     </form>
   </mat-card-content>
-  <button mat-raised-button color="primary" (click)="saveBanner()">Valider</button>
+
+  <button class="save-banner" mat-raised-button color="primary" [disabled]="canShowSaveButton()" (click)="saveBanner()">Valider</button>
 </mat-card>

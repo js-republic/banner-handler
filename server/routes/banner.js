@@ -39,30 +39,38 @@ router.delete("/:id", ensureAuthenticated, (req, res) => {
  *  Returns a random banner given the current date
  */
 router.get("/random", (req, res) => {
-  bannerCtrl
-    .getRandomBanner(req.query)
-    .then(imgPath => {
-      if (req.query.noredirect) {
-        const absolutePath = path.join(PUBLIC_PATH, imgPath);
-        res.sendFile(absolutePath);
-      } else {
-        res.redirect(imgPath);
-      }
-    })
-    .catch(e => {
-      console.error(e);
-      res.status(500).send(e.message);
-    });
+
+  const bannersList = bannerCtrl.getBannersArray();
+  if ( bannersList.length > 0 ) {
+    bannerCtrl
+      .getRandomBanner(req.query)
+      .then(imgPath => {
+        if (req.query.noredirect) {
+          const absolutePath = path.join(PUBLIC_PATH, imgPath);
+          res.sendFile(absolutePath);
+        } else {
+          res.redirect(imgPath);
+        }
+      })
+      .catch(e => {
+        console.error(e);
+        res.status(500).send(e.message);
+      });
+  } else {
+    res.sendStatus(404);
+  }
+
 });
 
 /**
  *  Handles banner picture upload
  */
 router.post("/upload", ensureAuthenticated, (req, res) => {
-  const bannerFolder = `${PUBLIC_PATH}/assets/banners/`;
+  const bannerFolder = `${PUBLIC_PATH}assets/banners/`;
   req.pipe(req.busboy);
 
   req.busboy.on("file", (fieldname, file, filename) => {
+
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
       .then(newFilename => res.send({data: newFilename}));
