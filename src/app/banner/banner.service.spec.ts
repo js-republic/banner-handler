@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
-
-import { BannerService } from './banner.service';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { BannerServiceMock } from './banner.service.mock';
 
 describe('BannerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BannerService]
+      providers: [BannerServiceMock, HttpClient, HttpHandler]
     });
   });
 
-  it('should be created', inject([BannerService], (service: BannerService) => {
+  it('should be created', inject([BannerServiceMock], (service: BannerServiceMock) => {
     expect(service).toBeTruthy();
   }));
 });

@@ -1,5 +1,6 @@
 const fs        = require('fs');
 const moment    = require('moment');
+const mkdirp    = require('mkdirp');
 const banners   = require("../banners.json");
 
 class BannerController {
@@ -86,15 +87,25 @@ class BannerController {
     }
 
     uploadBanner(bannerFolder, fieldname, file, filename) {
+
         return new Promise((resolve, reject) => {
-            console.log("Uploading: " + filename);
-            const [_, name, extension] = /(.*)\.(.*)/.exec(filename)
-            const newFilename = `${Date.now()}.${extension}`;
-            const fstream = fs.createWriteStream(bannerFolder + newFilename);
-            file.pipe(fstream);
-            fstream.on("close", () => {
-                console.log("Upload succeed !");
-                resolve(newFilename);
+
+            mkdirp(bannerFolder, (err) => {
+
+                if(err) console.error(err);
+
+                console.log("Uploading: " + filename);
+
+                const [_, name, extension] = /(.*)\.(.*)/.exec(filename);
+                const newFilename = `${Date.now()}.${extension}`;
+                const fstream = fs.createWriteStream(bannerFolder + newFilename);
+
+                file.pipe(fstream);
+
+                fstream.on("close", () => {
+                    console.log("Upload succeed !");
+                    resolve(newFilename);
+                });
             });
         });
     }

@@ -102,3 +102,4 @@ export class BannerComponent implements OnInit {
     this.bannerService.deleteBanner(b).subscribe(() => this.loadBanners());
   }
 }
+
