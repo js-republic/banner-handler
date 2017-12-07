@@ -33,7 +33,7 @@ class BannerController {
     }
 
     getFs() {
-        return new S3FS('banner-handler', awsOptions);
+        return new S3FS(env.AWS_S3_BUCKET, awsOptions);
     }
 
 	insertBanner(banner) {
