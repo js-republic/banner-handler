@@ -26,14 +26,11 @@ export class BannerService {
       .post<Banner>('/banner', banner);
   }
 
-  uploadBanner(data) {
-
-    this.http
-      .post('/upload', data)
-      .subscribe(
-        success => console.log(success),
-        error => console.error(error)
-      );
+  getImgUrlFromPath(imgPath) {
+    return this.http.get('/banner/img/path?s3Path=' + imgPath);
   }
 
+  uploadBanner(data): Observable<any> {
+    return this.http.post('/upload', data)
+  }
 }

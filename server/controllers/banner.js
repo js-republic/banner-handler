@@ -26,7 +26,7 @@ class BannerController {
             try {
                 return JSON.parse(buffer.Body.toString('utf-8'));
             } catch(e) {
-                throw e;
+                throw new Error(e);
             }
         });
     }
@@ -40,8 +40,6 @@ class BannerController {
 		return new Promise((resolve, reject) => {
 
             this.getBanners().then(banners => {
-
-                console.log('banners', banners);
 
                 banner.id = Date.now();
                 banners[banner.id] = banner;
@@ -125,19 +123,34 @@ class BannerController {
 
     uploadBanner(bannerFolder, fieldname, file, filename) {
 
+        const fsImpl = this.getFs();
+
         return new Promise((resolve, reject) => {
 
             console.log("Uploading: " + filename);
 
-            const [_, name, extension] = /(.*)\.(.*)/.exec(filename)
+            const [_, name, extension] = /(.*)\.(.*)/.exec(filename);
             const newFilename = `${Date.now()}.${extension}`;
-            const fstream = fs.createWriteStream(bannerFolder + newFilename);
+            const fstream = fsImpl.createWriteStream(bannerFolder + newFilename);
 
             file.pipe(fstream);
             fstream.on("close", () => {
                 console.log("Upload succeed !");
                 resolve(newFilename);
             });
+
+            resolve(newFilename);
+        });
+    }
+
+    getPictureUrlFromS3Path(s3Path) {
+
+        console.log('s3Path', s3Path);
+
+        return this.getFs().readFile(s3Path).then(picture => {
+
+            const base64Picture = picture.Body.toString('base64');
+            return `data:image/gif;base64,${base64Picture}`;
         });
     }
 

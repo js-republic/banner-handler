@@ -67,7 +67,9 @@ export class FormComponent implements OnInit {
 
     if (fileCount > 0) {
       formData.append('picture', inputEl.files.item(0));
-      this.bannerService.uploadBanner(formData);
+      this.bannerService.uploadBanner(formData).subscribe(path => {
+        this.banner.path = path;
+      });
     }
   }
 

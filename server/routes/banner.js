@@ -38,6 +38,26 @@ router.delete("/:id", ensureAuthenticated, (req, res) => {
 });
 
 /**
+ *  Get banner picture from S3
+ */
+router.get("/img/path", ensureAuthenticated, (req, res) => {
+
+  const s3Path = req.query.s3Path;
+
+  console.log('s3Path', s3Path);
+
+  try {
+
+    bannerCtrl.getPictureUrlFromS3Path(s3Path).then(pictureUrl => {
+      res.status(200).send({data: pictureUrl});
+    });
+
+  } catch (e) {
+    res.status(404).send(e.message);
+  }
+});
+
+/**
  *  Returns a random banner given the current date
  */
 router.get("/random", (req, res) => {
@@ -61,20 +81,21 @@ router.get("/random", (req, res) => {
   } else {
     res.sendStatus(404);
   }
-
 });
 
 /**
  *  Handles banner picture upload
  */
 router.post("/upload", ensureAuthenticated, (req, res) => {
-  const bannerFolder = `${PUBLIC_PATH}assets/banners/`;
+
+  const bannerFolder = `assets/banners/`;
   req.pipe(req.busboy);
 
   req.busboy.on("file", (fieldname, file, filename) => {
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
-      .then(newFilename => res.send({data: newFilename}));
+      .then(newFilename => res.send({data: newFilename}))
+      .catch(e => console.log('e', e));
   });
 });
 

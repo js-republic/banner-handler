@@ -95,7 +95,27 @@ export class BannerComponent implements OnInit {
     }
 
     return icon;
+  }
 
+  getBannerPicture(banner) {
+
+    if(!banner.loading) {
+      banner.loading = true;
+
+      this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
+        banner.picture = url.data;
+      });
+    }
+  }
+
+  bannerHasPicture(banner) {
+
+    if(!banner.picture) {
+      this.getBannerPicture(banner);
+      return false;
+    }
+
+    return true;
   }
 
   deleteBanner(b) {
