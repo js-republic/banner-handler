@@ -1,96 +1,138 @@
 const fs        = require('fs');
 const moment    = require('moment');
-const banners   = require("../banners.json");
+const S3FS      = require('s3fs');
+
+const awsOptions = {
+  endpoint: 's3-eu-central-1.amazonaws.com',
+  signatureVersion: 'v4',
+  region: 'eu-central-1',
+  accessKeyId: "AKIAJ6P66UVG5NKDRCNQ",
+  secretAccessKey: "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",
+};
 
 class BannerController {
 
 	getBannersArray() {
-		return this.getValues(banners);
+
+        return this.getBanners().then(banners => {
+            return Promise.resolve(this.getValues(banners));
+        });
 	}
+
+    getBanners() {
+
+        return this.getFs().readFile('/banners.json').then(buffer => {
+
+            try {
+                return JSON.parse(buffer.Body.toString('utf-8'));
+            } catch(e) {
+                throw e;
+            }
+        });
+    }
+
+    getFs() {
+        return new S3FS('banner-handler', awsOptions);
+    }
 
 	insertBanner(banner) {
 
 		return new Promise((resolve, reject) => {
 
-		    banner.id = Date.now();
+            this.getBanners().then(banners => {
 
-		    banners[banner.id] = banner;
+                console.log('banners', banners);
 
-		    this.rewriteBanners(banners).then(() => {
-                resolve({banner});
-            })
+                banner.id = Date.now();
+                banners[banner.id] = banner;
+
+                this.updateBanners(banners);
+            });
 		});
     }
 
-    rewriteBanners(banners) {
+    updateBanners(banners) {
 
-        return new Promise((resolve, reject) => {
+        const fsImpl = this.getFs();
 
-            fs.writeFile(__dirname+'/../banners.json', JSON.stringify(banners, null, 2), 'utf8', (err) => {
-                if (err) reject(err);
-                resolve();
-            });
+        fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
+            console.log('saved !');
+        }, function(reason) {
+            throw reason;
         });
     }
-    
+
     deleteBanner(id) {
 
-        if (banners.hasOwnProperty(id)){
+        this.getBanners().then(banners => {
 
-            const bannerId = id.toString();
-            delete banners[bannerId];
+            if (banners.hasOwnProperty(id)){
 
-            this.rewriteBanners(banners);
+                const bannerId = id.toString();
+                delete banners[bannerId];
 
-        } else {
-            throw new Error(`Banner (${banner.id}) not found`);
-        }
+                this.updateBanners(banners);
+
+            } else {
+                throw new Error(`Banner (${banner.id}) not found`);
+            }
+        });
     }
 
     getRandomBanner(params) {
 
         return new Promise((resolve, reject) => {
 
-            const now = moment();
+            this.getBanners().then(banners => {
 
-            const availableBanners = this.getValues(banners)
-                .filter(this.containsCompany(params.company))
-            ;
+                const now = moment();
 
-            let allowedBanners = availableBanners
-                .filter(banner => !banner.isDefault)
-                .filter(banner => 
-                    moment(banner.begin).isBefore(now)
-                    && moment(banner.end).isAfter(now)
-                )
-            ;
+                const availableBanners = this.getValues(banners)
+                    .filter(this.containsCompany(params.company))
+                ;
 
-            if(allowedBanners.length === 0) {
-                allowedBanners = availableBanners
-                    .filter(banner => banner.isDefault)
-            }
+                let allowedBanners = availableBanners
+                    .filter(banner => !banner.isDefault)
+                    .filter(banner =>
+                        moment(banner.begin).isBefore(now)
+                        && moment(banner.end).isAfter(now)
+                    )
+                ;
 
-            const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
+                if(allowedBanners.length === 0) {
+                    allowedBanners = availableBanners
+                        .filter(banner => banner.isDefault)
+                }
 
-            resolve(randomBanner.path);
+                const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
+
+                resolve(randomBanner.path);
+            });
         });
     }
 
     containsCompany(companyName) {
+
         return (banner) => {
+
             if (companyName) {
                 return banner.companies[companyName];
             }
+
             return true;
         }
     }
 
     uploadBanner(bannerFolder, fieldname, file, filename) {
+
         return new Promise((resolve, reject) => {
+
             console.log("Uploading: " + filename);
+
             const [_, name, extension] = /(.*)\.(.*)/.exec(filename)
             const newFilename = `${Date.now()}.${extension}`;
             const fstream = fs.createWriteStream(bannerFolder + newFilename);
+
             file.pipe(fstream);
             fstream.on("close", () => {
                 console.log("Upload succeed !");

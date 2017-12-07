@@ -10,7 +10,9 @@ const PUBLIC_PATH = `${__dirname}/../../dist/`;
  *  Returns all banners
  */
 router.get("/", ensureAuthenticated, (req, res) => {
-  res.json(bannerCtrl.getBannersArray());
+  bannerCtrl.getBannersArray().then(banners => {
+    res.json(banners);
+  });
 });
 
 /**
