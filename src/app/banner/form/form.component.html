@@ -20,6 +20,10 @@
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
+
+          <div *ngIf="!isDateBeginAfterDateEnd" class="error-message">
+            <p>La date de début doit avoir une valeur inférieure à celle de fin.</p>
+          </div>
         </div>
       </section>
       <section>
@@ -27,6 +31,10 @@
         <mat-checkbox name="allowed-ux" [(ngModel)]="banner.companies.ux">UX-Republic</mat-checkbox>
         <mat-checkbox name="allowed-js" [(ngModel)]="banner.companies.js">JS-Republic</mat-checkbox>
         <mat-checkbox name="allowed-iot" [(ngModel)]="banner.companies.iot">IOT-Makers</mat-checkbox>
+
+        <div *ngIf="!isAtLeastOneCompany" class="error-message">
+          <p>Au moins une des trois entreprises doit être cochée.</p>
+        </div>
       </section>
       <section class="img-section">
         <h3>Image utilisée :</h3>
@@ -36,6 +44,9 @@
             <span>Sélectionner</span>
             <input #fileInput type="file" style="display:none;" name="picture" ng2FileSelect [uploader]="uploader"/>
           </button>
+        </div>
+        <div *ngIf="!isBannerImagePresent" class="error-message">
+          <p>Vous devez sélectionner une image.</p>
         </div>
         <div *ngIf="this.uploader.isUploading && uploader.progress !== 100">
           <mat-progress-bar [value]="uploader.progress" [mode]="'determinate'"></mat-progress-bar>
