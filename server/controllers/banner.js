@@ -1,13 +1,14 @@
 const fs        = require('fs');
 const moment    = require('moment');
 const S3FS      = require('s3fs');
+const env       = require('../env');
 
 const awsOptions = {
   endpoint: 's3-eu-central-1.amazonaws.com',
   signatureVersion: 'v4',
   region: 'eu-central-1',
-  accessKeyId: "AKIAJ6P66UVG5NKDRCNQ",
-  secretAccessKey: "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",
+  accessKeyId: env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
 };
 
 class BannerController {
