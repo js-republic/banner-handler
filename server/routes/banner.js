@@ -9,10 +9,13 @@ const PUBLIC_PATH = `${__dirname}/../../dist/`;
 /**
  *  Returns all banners
  */
-router.get("/", ensureAuthenticated, (req, res) => {
-  bannerCtrl.getBannersArray().then(banners => {
+router.get("/", ensureAuthenticated, async (req, res) => {
+  try {
+    const banners = await bannerCtrl.getBannersArray();
     res.json(banners);
-  });
+  } catch(e) {
+    throw new Error(e);
+  }
 });
 
 /**
@@ -29,6 +32,7 @@ router.post("/", ensureAuthenticated, (req, res) => {
  */
 router.delete("/:id", ensureAuthenticated, (req, res) => {
   const id = req.params.id;
+
   try {
 
     bannerCtrl.deleteBanner(id).then(() => {
@@ -48,9 +52,7 @@ router.get("/img/path", ensureAuthenticated, (req, res) => {
   const s3Path = req.query.s3Path;
 
   try {
-
     const url = bannerCtrl.getPictureUrlFromS3Path(s3Path);
-
     res.status(200).send({data: url});
 
   } catch (e) {
@@ -61,26 +63,25 @@ router.get("/img/path", ensureAuthenticated, (req, res) => {
 /**
  *  Returns a random banner given the current date
  */
-router.get("/random", (req, res) => {
+router.get("/random", async (req, res) => {
 
-  bannerCtrl.getBannersArray().then(bannersList => {
+  const bannersList = await bannerCtrl.getBannersArray();
 
-    if ( bannersList.length > 0 ) {
+  if ( bannersList.length > 0 ) {
 
-      bannerCtrl
-        .getRandomBanner(req.query)
-        .then(imgPath => {
-          res.redirect(imgPath);
-        })
-        .catch(e => {
-          console.error(e);
-          res.status(500).send(e.message);
-        });
+    bannerCtrl
+      .getRandomBanner(req.query)
+      .then(imgPath => {
+        res.redirect(imgPath);
+      })
+      .catch(e => {
+        console.error(e);
+        res.status(500).send(e.message);
+      });
 
-    } else {
-      res.sendStatus(404);
-    }
-  });
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 /**

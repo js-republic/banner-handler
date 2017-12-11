@@ -14,10 +14,7 @@ const awsOptions = {
 class BannerController {
 
 	getBannersArray() {
-
-        return this.getBanners().then(banners => {
-            return Promise.resolve(this.getValues(banners));
-        });
+        return this.getBanners().then(this.getValues);
 	}
 
     getBanners() {
@@ -77,33 +74,30 @@ class BannerController {
 
     getRandomBanner(params) {
 
-        return new Promise((resolve, reject) => {
+        return this.getBanners().then(banners => {
 
-            this.getBanners().then(banners => {
+            const now = moment();
 
-                const now = moment();
+            const availableBanners = this.getValues(banners)
+                .filter(this.containsCompany(params.company))
+            ;
 
-                const availableBanners = this.getValues(banners)
-                    .filter(this.containsCompany(params.company))
-                ;
+            let allowedBanners = availableBanners
+                .filter(banner => !banner.isDefault)
+                .filter(banner =>
+                    moment(banner.begin).isBefore(now)
+                    && moment(banner.end).isAfter(now)
+                )
+            ;
 
-                let allowedBanners = availableBanners
-                    .filter(banner => !banner.isDefault)
-                    .filter(banner =>
-                        moment(banner.begin).isBefore(now)
-                        && moment(banner.end).isAfter(now)
-                    )
-                ;
+            if(allowedBanners.length === 0) {
+                allowedBanners = availableBanners
+                    .filter(banner => banner.isDefault)
+            }
 
-                if(allowedBanners.length === 0) {
-                    allowedBanners = availableBanners
-                        .filter(banner => banner.isDefault)
-                }
+            const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
 
-                const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
-
-                resolve(this.getPictureUrlFromS3Path(randomBanner.path));
-            });
+            return this.getPictureUrlFromS3Path(randomBanner.path);
         });
     }
 
@@ -132,10 +126,6 @@ class BannerController {
             const fstream = fsImpl.createWriteStream(bannerFolder + newFilename);
 
             file.pipe(fstream);
-            fstream.on("close", () => {
-                console.log("Upload succeed !");
-                resolve(newFilename);
-            });
 
             resolve(newFilename);
         });
