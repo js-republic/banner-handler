@@ -38,23 +38,20 @@ class BannerController {
 
 	insertBanner(banner) {
 
-		return new Promise((resolve, reject) => {
+        return this.getBanners().then(banners => {
 
-            this.getBanners().then(banners => {
+            banner.id = Date.now();
+            banners[banner.id] = banner;
 
-                banner.id = Date.now();
-                banners[banner.id] = banner;
-
-                this.updateBanners(banners);
-            });
-		});
+            return this.updateBanners(banners);
+        });
     }
 
     updateBanners(banners) {
 
         const fsImpl = this.getFs();
 
-        fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
+        return fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
             console.log('saved !');
         }, function(reason) {
             throw reason;
@@ -63,14 +60,14 @@ class BannerController {
 
     deleteBanner(id) {
 
-        this.getBanners().then(banners => {
+        return this.getBanners().then(banners => {
 
             if (banners.hasOwnProperty(id)){
 
                 const bannerId = id.toString();
                 delete banners[bannerId];
 
-                this.updateBanners(banners);
+                return this.updateBanners(banners);
 
             } else {
                 throw new Error(`Banner (${banner.id}) not found`);

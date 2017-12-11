@@ -34,6 +34,7 @@ export class BannerComponent implements OnInit {
   }
 
   loadBanners() {
+
     this.bannerService
       .loadBanners()
       .subscribe(

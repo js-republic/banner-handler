@@ -30,8 +30,11 @@ router.post("/", ensureAuthenticated, (req, res) => {
 router.delete("/:id", ensureAuthenticated, (req, res) => {
   const id = req.params.id;
   try {
-    bannerCtrl.deleteBanner(id);
-    res.sendStatus(200);
+
+    bannerCtrl.deleteBanner(id).then(() => {
+      res.status(200).send({status: 'success'});
+    });
+
   } catch (e) {
     res.status(404).send(e.message);
   }
