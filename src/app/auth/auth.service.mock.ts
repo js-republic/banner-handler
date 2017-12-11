@@ -1,17 +1,10 @@
-import { Injectable } from '@angular/core';
-import { User } from './user';
-import { HttpClient } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import {User} from './user';
+import {Injectable} from '@angular/core';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class AuthServiceMock extends AuthService {
-
   getUser(): Promise<User> {
-
-  	return Promise.resolve({
-  		id: '',
-  		avatar: '',
-  		username: ''
-  	});
+    return Promise.resolve(new User('', '', ''));
   }
 }
