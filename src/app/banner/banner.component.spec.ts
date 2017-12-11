@@ -61,9 +61,7 @@ const declarations = [
   AliciaKeys
 ];
 
-const providers = [BannerService];
-
-describe('BannerComponent', () => {
+xdescribe('BannerComponent', () => {
 
   let component: BannerComponent;
   let fixture: ComponentFixture<BannerComponent>;
@@ -71,8 +69,7 @@ describe('BannerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports,
-      declarations,
-      providers
+      declarations
     })
     .overrideComponent(BannerComponent, {
       set: {

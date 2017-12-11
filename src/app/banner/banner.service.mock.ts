@@ -33,8 +33,4 @@ export class BannerServiceMock extends BannerService {
   saveBanner(banner): Observable<Banner> {
     return Observable.of(fakeBanners[0]);
   }
-
-  uploadBanner(data): Observable<any> {
-    return Observable.of(fakeBanners[0]);
-  }
 }

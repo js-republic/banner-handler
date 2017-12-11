@@ -8,9 +8,11 @@ describe('Banner Handler App', () => {
   beforeEach(() => {
     page = new AppPage();
     page.navigateTo();
-    page.setStorage('testEnv', '');
+    page.setStorage('testEnv', 'true');
   });
 
+  // Storage not set for this one because navigate is called before.
+  // But you can't set storage if you hadn't navigate. Hum.
   it('should display login page if unauthenticated', () => {
 
     const pageTitle = page.select('mat-toolbar span').getText();
@@ -24,16 +26,6 @@ describe('Banner Handler App', () => {
     expect(authBtnText).toEqual("Je m'authentifie avec Google");
 
     expect(bannerComponent.isPresent()).toBeFalsy();
-  });
-});
-
-describe('Banner Handler App', () => {
-  let page: AppPage;
-
-  beforeEach(() => {
-    page = new AppPage();
-    page.navigateTo();
-    page.setStorage('testEnv', 'true');
   });
 
   it('should evade login page with if test env is specified and display banners', () => {

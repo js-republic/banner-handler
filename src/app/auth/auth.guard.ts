@@ -18,6 +18,8 @@ export class AuthGard implements CanActivate {
 
         const env = localStorage.getItem('testEnv');
 
+        console.log('env', env);
+
         if(env && env === 'true') {
           return true;
         }
