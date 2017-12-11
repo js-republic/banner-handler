@@ -14,7 +14,7 @@ router.get("/", ensureAuthenticated, async (req, res) => {
     const banners = await bannerCtrl.getBannersArray();
     res.json(banners);
   } catch(e) {
-    throw new Error(e);
+    res.status(500).send(e.message);
   }
 });
 
@@ -95,7 +95,10 @@ router.post("/upload", ensureAuthenticated, (req, res) => {
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
       .then(newFilename => res.send({data: newFilename}))
-      .catch(e => console.log('e', e));
+      .catch(e => {
+        console.log('e', e);
+        res.status(500).send(e.message);
+      });
   });
 });
 
