@@ -33,7 +33,6 @@ import {BannerComponent} from './banner/banner.component';
 
 import {BannerService} from './banner/banner.service';
 import {AuthService} from './auth/auth.service';
-import {UserService} from './services/user.service';
 
 import {BannerDataSource} from './banner/banner.datasource';
 
@@ -77,7 +76,6 @@ const appRoutes: Routes = [
   ],
   providers: [
     BannerService,
-    UserService,
     BannerDataSource,
     AuthGard,
     AuthService,

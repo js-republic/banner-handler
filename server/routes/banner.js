@@ -89,6 +89,7 @@ router.post("/upload", ensureAuthenticated, (req, res) => {
   req.pipe(req.busboy);
 
   req.busboy.on("file", (fieldname, file, filename) => {
+
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
       .then(newFilename => res.send({data: newFilename}))
