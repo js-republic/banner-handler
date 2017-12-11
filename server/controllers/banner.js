@@ -82,6 +82,8 @@ class BannerController {
 
         return new Promise((resolve, reject) => {
 
+            console.log('ok');
+
             this.getBanners().then(banners => {
 
                 const now = moment();
@@ -105,7 +107,9 @@ class BannerController {
 
                 const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
 
-                resolve(randomBanner.path);
+                console.log('ah');
+
+                resolve(this.getPictureUrlFromS3Path(randomBanner.path));
             });
         });
     }
@@ -145,14 +149,7 @@ class BannerController {
     }
 
     getPictureUrlFromS3Path(s3Path) {
-
-        console.log('s3Path', s3Path);
-
-        return this.getFs().readFile(s3Path).then(picture => {
-
-            const base64Picture = picture.Body.toString('base64');
-            return `data:image/gif;base64,${base64Picture}`;
-        });
+        return `http://s3-eu-central-1.amazonaws.com/${env.AWS_S3_BUCKET}${s3Path}`;
     }
 
 	getValues(obj) {

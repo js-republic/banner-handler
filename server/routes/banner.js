@@ -44,13 +44,11 @@ router.get("/img/path", ensureAuthenticated, (req, res) => {
 
   const s3Path = req.query.s3Path;
 
-  console.log('s3Path', s3Path);
-
   try {
 
-    bannerCtrl.getPictureUrlFromS3Path(s3Path).then(pictureUrl => {
-      res.status(200).send({data: pictureUrl});
-    });
+    const url = bannerCtrl.getPictureUrlFromS3Path(s3Path);
+
+    res.status(200).send({data: url});
 
   } catch (e) {
     res.status(404).send(e.message);
@@ -62,25 +60,24 @@ router.get("/img/path", ensureAuthenticated, (req, res) => {
  */
 router.get("/random", (req, res) => {
 
-  const bannersList = bannerCtrl.getBannersArray();
-  if ( bannersList.length > 0 ) {
-    bannerCtrl
-      .getRandomBanner(req.query)
-      .then(imgPath => {
-        if (req.query.noredirect) {
-          const absolutePath = path.join(PUBLIC_PATH, imgPath);
-          res.sendFile(absolutePath);
-        } else {
+  bannerCtrl.getBannersArray().then(bannersList => {
+
+    if ( bannersList.length > 0 ) {
+
+      bannerCtrl
+        .getRandomBanner(req.query)
+        .then(imgPath => {
           res.redirect(imgPath);
-        }
-      })
-      .catch(e => {
-        console.error(e);
-        res.status(500).send(e.message);
-      });
-  } else {
-    res.sendStatus(404);
-  }
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(500).send(e.message);
+        });
+
+    } else {
+      res.sendStatus(404);
+    }
+  });
 });
 
 /**
