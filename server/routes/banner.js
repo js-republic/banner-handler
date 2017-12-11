@@ -31,17 +31,15 @@ router.post("/", ensureAuthenticated, (req, res) => {
  *  Delete given banner
  */
 router.delete("/:id", ensureAuthenticated, (req, res) => {
+
   const id = req.params.id;
 
-  try {
+  bannerCtrl.deleteBanner(id).then(() => {
+    res.status(200).send({status: 'success'});
 
-    bannerCtrl.deleteBanner(id).then(() => {
-      res.status(200).send({status: 'success'});
-    });
-
-  } catch (e) {
+  }).catch(e => {
     res.status(404).send(e.message);
-  }
+  });
 });
 
 /**
