@@ -33,4 +33,8 @@ export class BannerServiceMock extends BannerService {
   saveBanner(banner): Observable<Banner> {
     return Observable.of(fakeBanners[0]);
   }
+
+  getImgUrlFromPath(imgPath) {
+    return Observable.of(fakeBanners[0].path);
+  }
 }

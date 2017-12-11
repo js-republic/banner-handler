@@ -61,7 +61,7 @@ const declarations = [
   AliciaKeys
 ];
 
-xdescribe('BannerComponent', () => {
+describe('BannerComponent', () => {
 
   let component: BannerComponent;
   let fixture: ComponentFixture<BannerComponent>;
