@@ -52,7 +52,7 @@ class BannerController {
         const fsImpl = this.getFs();
 
         return fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
-            console.log('saved !');
+            console.log('banners saved !');
         }, function(reason) {
             throw reason;
         });
@@ -79,8 +79,6 @@ class BannerController {
 
         return new Promise((resolve, reject) => {
 
-            console.log('ok');
-
             this.getBanners().then(banners => {
 
                 const now = moment();
@@ -103,8 +101,6 @@ class BannerController {
                 }
 
                 const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
-
-                console.log('ah');
 
                 resolve(this.getPictureUrlFromS3Path(randomBanner.path));
             });
