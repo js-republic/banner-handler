@@ -10,6 +10,10 @@ import {BannerService} from './banner.service';
 
 import {MatSidenav} from '@angular/material';
 
+import { Store } from '../redux/store';
+
+const s = new Store();
+
 @Component({
   selector: 'app-banner',
   templateUrl: './banner.component.html',
@@ -35,17 +39,22 @@ export class BannerComponent implements OnInit {
 
   loadBanners() {
 
-    this.bannerService
-      .loadBanners()
-      .subscribe(
-        response => (this.banners = response),
-        error => console.log(error)
-      );
+    // this.bannerService
+    //   .loadBanners()
+    //   .subscribe(
+    //     response => (this.banners = response),
+    //     error => console.log(error)
+    //   );
+
+    this.banners = s.getState().banners;
+    console.log('this.banners', this.banners);
   }
 
   createNewBanner() {
-    this.sidenav.open();
-    this.newBanner = new Banner();
+    s.dispatch('ADD_BANNER');
+    this.loadBanners();
+    // this.sidenav.open();
+    // this.newBanner = new Banner();
   }
 
   sortBanners(propertyName) {
