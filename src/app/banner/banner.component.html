@@ -24,12 +24,15 @@
 
         <tbody>
           <tr *ngFor="let b of banners">
-            <td><img [src]="b.path" ></td>
-            <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
-            <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
-            <td>{{b.companies | aliciaKeys}}</td>
-            <td>{{b.isDefault}}</td>
-            <td><button mat-button color="warn" (click)="deleteBanner(b)">Supprimer</button></td>
+
+            <ng-container *ngIf="bannerHasPicture(b)">
+              <td><img [src]="b.picture"></td>
+              <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
+              <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
+              <td>{{b.companies | aliciaKeys}}</td>
+              <td>{{b.isDefault}}</td>
+              <td><button mat-button color="warn" (click)="deleteBanner(b)">Supprimer</button></td>
+            </ng-container>
           </tr>
         </tbody>
 

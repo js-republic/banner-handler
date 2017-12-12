@@ -48,10 +48,6 @@ const imports = [
   BrowserAnimationsModule
 ];
 
-const providers = [
-  BannerService
-];
-
 describe('FormComponent', () => {
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
@@ -112,7 +108,7 @@ describe('FormComponent', () => {
     fixture.detectChanges();
 
     expectResult({
-      attr: '', 
+      attr: '',
       img: ''
     });
 
@@ -123,7 +119,7 @@ describe('FormComponent', () => {
     fixture.detectChanges();
 
     expectResult({
-      attr: null, 
+      attr: null,
       img: 'url("' + imgTestPath + '")'
     });
   });

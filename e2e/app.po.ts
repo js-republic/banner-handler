@@ -14,6 +14,6 @@ export class AppPage {
   }
 
   setStorage(element, value) {
-  	browser.executeScript('localStorage.setItem("' + element + '", "' + value + '");');
+  	return browser.executeScript('localStorage.setItem("' + element + '", "' + value + '");');
   }
 }

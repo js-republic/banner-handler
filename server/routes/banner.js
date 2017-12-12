@@ -9,8 +9,13 @@ const PUBLIC_PATH = `${__dirname}/../../dist/`;
 /**
  *  Returns all banners
  */
-router.get("/", ensureAuthenticated, (req, res) => {
-  res.json(bannerCtrl.getBannersArray());
+router.get("/", ensureAuthenticated, async (req, res) => {
+  try {
+    const banners = await bannerCtrl.getBannersArray();
+    res.json(banners);
+  } catch(e) {
+    res.status(500).send(e.message);
+  }
 });
 
 /**
@@ -26,10 +31,28 @@ router.post("/", ensureAuthenticated, (req, res) => {
  *  Delete given banner
  */
 router.delete("/:id", ensureAuthenticated, (req, res) => {
+
   const id = req.params.id;
+
+  bannerCtrl.deleteBanner(id).then(() => {
+    res.status(200).send({status: 'success'});
+
+  }).catch(e => {
+    res.status(404).send(e.message);
+  });
+});
+
+/**
+ *  Get banner picture from S3
+ */
+router.get("/img/path", ensureAuthenticated, (req, res) => {
+
+  const s3Path = req.query.s3Path;
+
   try {
-    bannerCtrl.deleteBanner(id);
-    res.sendStatus(200);
+    const url = bannerCtrl.getPictureUrlFromS3Path(s3Path);
+    res.status(200).send({data: url});
+
   } catch (e) {
     res.status(404).send(e.message);
   }
@@ -38,42 +61,44 @@ router.delete("/:id", ensureAuthenticated, (req, res) => {
 /**
  *  Returns a random banner given the current date
  */
-router.get("/random", (req, res) => {
+router.get("/random", async (req, res) => {
 
-  const bannersList = bannerCtrl.getBannersArray();
+  const bannersList = await bannerCtrl.getBannersArray();
+
   if ( bannersList.length > 0 ) {
+
     bannerCtrl
       .getRandomBanner(req.query)
       .then(imgPath => {
-        if (req.query.noredirect) {
-          const absolutePath = path.join(PUBLIC_PATH, imgPath);
-          res.sendFile(absolutePath);
-        } else {
-          res.redirect(imgPath);
-        }
+        res.redirect(imgPath);
       })
       .catch(e => {
         console.error(e);
         res.status(500).send(e.message);
       });
+
   } else {
     res.sendStatus(404);
   }
-
 });
 
 /**
  *  Handles banner picture upload
  */
 router.post("/upload", ensureAuthenticated, (req, res) => {
-  const bannerFolder = `${PUBLIC_PATH}assets/banners/`;
+
+  const bannerFolder = `assets/banners/`;
   req.pipe(req.busboy);
 
   req.busboy.on("file", (fieldname, file, filename) => {
 
     bannerCtrl
       .uploadBanner(bannerFolder, fieldname, file, filename)
-      .then(newFilename => res.send({data: newFilename}));
+      .then(newFilename => res.send({data: newFilename}))
+      .catch(e => {
+        console.log('e', e);
+        res.status(500).send(e.message);
+      });
   });
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "bannerhandler",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -11,7 +11,7 @@
     "start:client": "ng build --watch",
     "start:server": "nodemon ./server -w ./server",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test -sm=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:watch": "watch \"ng e2e -s false\" src e2e --wait=1",

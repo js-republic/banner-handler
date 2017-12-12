@@ -8,12 +8,12 @@ import {AuthService} from './auth/auth.service';
 import {AuthServiceMock} from './auth/auth.service.mock';
 import {RouterTestingModule} from '@angular/router/testing';
 
-xdescribe('AppComponent', () => {
+describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: AuthService, useClass: AuthServiceMock}
+        {provide: AuthService, useValue: AuthServiceMock}
       ],
       imports: [
         MatToolbarModule,

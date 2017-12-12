@@ -13,7 +13,7 @@ const providers  = [
 	HttpHandler,
 	{
 		provide: AuthService,
-		useClass: AuthServiceMock
+		useValue: AuthServiceMock
 	},
 	{
 		provide: Router,

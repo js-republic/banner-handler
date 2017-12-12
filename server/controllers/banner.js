@@ -1,56 +1,80 @@
 const fs        = require('fs');
 const moment    = require('moment');
-const mkdirp    = require('mkdirp');
-const banners   = require("../banners.json");
+const S3FS      = require('s3fs');
+const env       = require('../env');
+
+const awsOptions = {
+  endpoint: 's3-eu-central-1.amazonaws.com',
+  signatureVersion: 'v4',
+  region: 'eu-central-1',
+  accessKeyId: env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+};
 
 class BannerController {
 
 	getBannersArray() {
-		return this.getValues(banners);
+        return this.getBanners().then(this.getValues);
 	}
+
+    getBanners() {
+
+        return this.getFs().readFile('/banners.json').then(buffer => {
+
+            try {
+                return JSON.parse(buffer.Body.toString('utf-8'));
+            } catch(e) {
+                throw new Error(e);
+            }
+        });
+    }
+
+    getFs() {
+        return new S3FS(env.AWS_S3_BUCKET, awsOptions);
+    }
 
 	insertBanner(banner) {
 
-		return new Promise((resolve, reject) => {
+        return this.getBanners().then(banners => {
 
-		    banner.id = Date.now();
+            banner.id = Date.now();
+            banners[banner.id] = banner;
 
-		    banners[banner.id] = banner;
-
-		    this.rewriteBanners(banners).then(() => {
-                resolve({banner});
-            })
-		});
-    }
-
-    rewriteBanners(banners) {
-
-        return new Promise((resolve, reject) => {
-
-            fs.writeFile(__dirname+'/../banners.json', JSON.stringify(banners, null, 2), 'utf8', (err) => {
-                if (err) reject(err);
-                resolve();
-            });
+            return this.updateBanners(banners);
         });
     }
-    
+
+    updateBanners(banners) {
+
+        const fsImpl = this.getFs();
+
+        return fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
+            console.log('banners saved !');
+        }, function(reason) {
+            throw reason;
+        });
+    }
+
     deleteBanner(id) {
 
-        if (banners.hasOwnProperty(id)){
+        return this.getBanners().then(banners => {
 
-            const bannerId = id.toString();
-            delete banners[bannerId];
+            if (banners.hasOwnProperty(id)){
 
-            this.rewriteBanners(banners);
+                const bannerId = id.toString();
+                delete banners[bannerId];
 
-        } else {
-            throw new Error(`Banner (${banner.id}) not found`);
-        }
+                return this.updateBanners(banners);
+
+            } else {
+                throw new Error(`Banner (${banner.id}) not found`);
+            }
+        });
     }
 
     getRandomBanner(params) {
 
-        return new Promise((resolve, reject) => {
+        return this.getBanners().then(banners => {
 
             const now = moment();
 
@@ -60,7 +84,7 @@ class BannerController {
 
             let allowedBanners = availableBanners
                 .filter(banner => !banner.isDefault)
-                .filter(banner => 
+                .filter(banner =>
                     moment(banner.begin).isBefore(now)
                     && moment(banner.end).isAfter(now)
                 )
@@ -73,41 +97,42 @@ class BannerController {
 
             const randomBanner = allowedBanners[this.rand(0, allowedBanners.length -1)];
 
-            resolve(randomBanner.path);
+            return this.getPictureUrlFromS3Path(randomBanner.path);
         });
     }
 
     containsCompany(companyName) {
+
         return (banner) => {
+
             if (companyName) {
                 return banner.companies[companyName];
             }
+
             return true;
         }
     }
 
     uploadBanner(bannerFolder, fieldname, file, filename) {
 
+        const fsImpl = this.getFs();
+
         return new Promise((resolve, reject) => {
 
-            mkdirp(bannerFolder, (err) => {
+            console.log("Uploading: " + filename);
 
-                if(err) console.error(err);
+            const [_, name, extension] = /(.*)\.(.*)/.exec(filename);
+            const newFilename = `${Date.now()}.${extension}`;
+            const fstream = fsImpl.createWriteStream(bannerFolder + newFilename);
 
-                console.log("Uploading: " + filename);
+            file.pipe(fstream);
 
-                const [_, name, extension] = /(.*)\.(.*)/.exec(filename);
-                const newFilename = `${Date.now()}.${extension}`;
-                const fstream = fs.createWriteStream(bannerFolder + newFilename);
-
-                file.pipe(fstream);
-
-                fstream.on("close", () => {
-                    console.log("Upload succeed !");
-                    resolve(newFilename);
-                });
-            });
+            resolve(newFilename);
         });
+    }
+
+    getPictureUrlFromS3Path(s3Path) {
+        return `http://s3-eu-central-1.amazonaws.com/${env.AWS_S3_BUCKET}${s3Path}`;
     }
 
 	getValues(obj) {
