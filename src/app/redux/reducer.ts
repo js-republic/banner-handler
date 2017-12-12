@@ -6,18 +6,25 @@ export const reducer = (state, action) => {
 
         case "ADD_BANNER":
 
-            console.log('add banner');
-
             return {
                 banners: state.banners.concat(new Banner(
-                    "/assets/banners/1513011575778.jpg",
-                    "2017-12-11T14:29:21.034Z",
-                    "2018-01-11T14:29:21.034Z",
-                    '1513011575983',
-                    {"js":false,"ux":true,"iot":false},
-                    false
+                    action.payload.path,
+                    action.payload.begin,
+                    action.payload.end,
+                    action.payload.id,
+                    action.payload.companies,
+                    action.payload.isDefault
                 ))
             };
+
+        case 'REMOVE_BANNER':
+
+            return {
+                banners: [
+                    ...state.banners.slice(0, action.payload.index),
+                    ...state.banners.slice(action.payload.index + 1, state.banners.length)
+                ]
+            }
 
         case 'GET_BANNERS':
             return state.banners;

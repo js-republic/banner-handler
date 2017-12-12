@@ -13,8 +13,8 @@ export class Store {
         return this.state;
     }
 
-    dispatch(action): AppStateType {
-        this.state = reducer(this.state, {type: action});
+    dispatch(action, payload: any = false): AppStateType {
+        this.state = reducer(this.state, {type: action, payload});
         return this.state;
     }
 }

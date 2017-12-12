@@ -51,7 +51,16 @@ export class BannerComponent implements OnInit {
   }
 
   createNewBanner() {
-    s.dispatch('ADD_BANNER');
+
+    s.dispatch('ADD_BANNER', {
+      "path":"/assets/banners/1513011575778.jpg",
+      "begin":"2017-12-11T14:29:21.034Z",
+      "end":"2018-01-11T14:29:21.034Z",
+      "id":1513011575983,
+      "companies":{"js":false,"ux":true,"iot":false},
+      "isDefault":false
+    });
+
     this.loadBanners();
     // this.sidenav.open();
     // this.newBanner = new Banner();
@@ -128,8 +137,11 @@ export class BannerComponent implements OnInit {
     return true;
   }
 
-  deleteBanner(b) {
-    this.bannerService.deleteBanner(b).subscribe(() => this.loadBanners());
+  deleteBanner(b, index) {
+
+    s.dispatch('REMOVE_BANNER', {index});
+    this.loadBanners();
+    // this.bannerService.deleteBanner(b).subscribe(() => this.loadBanners());
   }
 }
 
