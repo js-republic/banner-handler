@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
 
-import {Observable, Subject} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 import {Banner} from './banner.model';
 import {BannerService} from './banner.service';

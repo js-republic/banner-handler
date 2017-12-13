@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
+import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs/observable/of';
 
-import { Banner } from './banner.model';
-import { BannerService } from './banner.service';
+import {Banner} from './banner.model';
+import {BannerService} from './banner.service';
 
 const fakeBanners = [{
-  path: "/assets/banners/1512477609895.png",
-  begin: "2017-12-05T12:39:58.802Z",
-  end: "2018-01-05T12:39:58.803Z",
-  id: "1512477610163",
+  path: '/assets/banners/1512477609895.png',
+  begin: '2017-12-05T12:39:58.802Z',
+  end: '2018-01-05T12:39:58.803Z',
+  id: '1512477610163',
   companies: {
     js: true,
     ux: true,
@@ -23,18 +23,18 @@ const fakeBanners = [{
 export class BannerServiceMock extends BannerService {
 
   deleteBanner(banner: Banner) {
-    return Observable.of({});
+    return of({});
   }
 
   loadBanners(): Observable<Banner[]> {
-    return Observable.of(fakeBanners);
+    return of(fakeBanners);
   }
 
   saveBanner(banner): Observable<Banner> {
-    return Observable.of(fakeBanners[0]);
+    return of(fakeBanners[0]);
   }
 
   getImgUrlFromPath(imgPath) {
-    return Observable.of(fakeBanners[0].path);
+    return of(fakeBanners[0].path);
   }
 }
