@@ -31,3 +31,8 @@ jobs:
       - run: yarn test -- -sr
 
       - run: yarn build -- --prod
+  deployment:
+    staging:
+      branch: master
+      heroku:
+        appname: banner-handler
