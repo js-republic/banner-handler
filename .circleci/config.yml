@@ -27,12 +27,21 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: yarn test -- -sr
+      - run: yarn test -- -sr -cc
+      - store_test_results:
+                path: coverage/
 
       - run: yarn build -- --prod
-  deployment:
-    staging:
-      branch: master
-      heroku:
-        appname: banner-handler
+
+      - run: bash .circleci/setup-heroku.sh
+
+      - add_ssh_keys:
+          fingerprints:
+            - "78:73:d5:14:4b:b9:99:4f:83:1a:d8:96:3b:6d:b6:ae"
+
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push --force git@heroku.com:banner-handler.git HEAD:refs/heads/master
+            heroku run python manage.py deploy
+            heroku restart
