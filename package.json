@@ -53,6 +53,7 @@
     "passport-google-oauth": "^1.0.0",
     "per-env": "^1.0.2",
     "rxjs": "^5.4.2",
+    "s3fs": "^2.5.0",
     "serve-static": "^1.13.1",
     "zone.js": "^0.8.14"
   },
