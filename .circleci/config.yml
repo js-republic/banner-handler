@@ -31,6 +31,9 @@ jobs:
       - store_test_results:
           path: coverage/
 
+      - store_artifacts:
+          path: coverage/
+
       - run: yarn build -- --prod
 
       - run: bash .circleci/setup-heroku.sh
