@@ -31,7 +31,7 @@ jobs:
       - store_test_results:
           path: coverage/
 
-      - run: yarn build -- --prod
+      - run: yarn build #yarn build -- --prod
 
       - run: bash .circleci/setup-heroku.sh
 
@@ -42,6 +42,5 @@ jobs:
       - run:
           name: Deploy Master to Heroku
           command: |
-            git push --force git@heroku.com:banner-handler.git HEAD:refs/heads/master
-            heroku run python manage.py deploy
-            heroku restart
+            heroku git:remote -a banner-handler
+            git push --force heroku master
