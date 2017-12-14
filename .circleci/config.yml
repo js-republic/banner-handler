@@ -31,7 +31,7 @@ jobs:
       - store_test_results:
           path: coverage/
 
-      - run: yarn build #yarn build -- --prod
+      - run: yarn build -- --prod
 
       - run: bash .circleci/setup-heroku.sh
 
@@ -58,7 +58,6 @@ jobs:
             git add .
             git commit -m "deployment ..."
             git push --force heroku master
-            heroku open
             rm -fr .git
 
             #go back to wherever we started.
