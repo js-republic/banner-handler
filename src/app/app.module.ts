@@ -41,9 +41,18 @@ import {AliciaKeys} from './banner/aliciakeys.pipe';
 
 import {AuthGard} from './auth/auth.guard';
 
+import { createLogger } from 'redux-logger';
+
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+
+import { AppState, AppStateType } from './redux/app.state';
+import { reducer } from './redux/reducer';
+
+import { Store, createStore } from "redux";
+
 const appRoutes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'main', component: BannerComponent, canActivate: [AuthGard]},
+  {path: 'login', component: LoginComponent, canActivate: [AuthGard]},
+  {path: 'main', component: BannerComponent},
   {path: '', redirectTo: '/main', pathMatch: 'full'}
 ];
 
@@ -68,6 +77,7 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     FileUploadModule,
     MatSidenavModule,
+    NgReduxModule,
     RouterModule.forRoot(
       appRoutes,
       // {enableTracing: true} // <-- debugging purposes only
@@ -79,9 +89,14 @@ const appRoutes: Routes = [
     BannerDataSource,
     AuthGard,
     AuthService,
-    {provide: LOCALE_ID, useValue: 'fr-FR'}
+    {provide: LOCALE_ID, useValue: 'fr-FR'},
+    // appStoreProviders
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {
+  constructor(ngRedux: NgRedux<AppStateType>) {
+    ngRedux.configureStore(reducer, AppState, [ createLogger() ]);
+  }
 }

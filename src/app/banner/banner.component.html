@@ -1,49 +1,66 @@
 <mat-sidenav-container>
-  <mat-card>
-    <mat-card-content>
-      <h2>Bannières</h2>
-      <table class="banners" *ngIf="banners.length">
-        <thead>
-          <tr>
-            <th>Bannière</th>
-            <th (click)="sortBanners('begin')">
-              <div class="sortable">
-                <mat-icon>{{ getArrowState('begin') }}</mat-icon><span>Date de début</span>
-              </div>
-            </th>
-            <th (click)="sortBanners('end')">
-              <div class="sortable">
-                <mat-icon>{{ getArrowState('end') }}</mat-icon><span>Date de fin</span>
-              </div>
-            </th>
-            <th>Envoyer pour</th>
-            <th>Tout le temps</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+    <mat-card>
+        <mat-card-content>
 
-        <tbody>
-          <tr *ngFor="let b of banners; let i = index" rel="">
+            <h2>Bannières</h2>
+            <div *ngIf="loading.banners">Loading ...</div>
 
-            <ng-container *ngIf="bannerHasPicture(b)">
-              <td><img [src]="b.picture"></td>
-              <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
-              <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
-              <td>{{b.companies | aliciaKeys}}</td>
-              <td>{{b.isDefault}}</td>
-              <td><button mat-button color="warn" (click)="deleteBanner(b, i)">Supprimer</button></td>
-            </ng-container>
-          </tr>
-        </tbody>
+            <table class="banners" *ngIf="banners">
 
-      </table>
-      <div *ngIf="!banners.length">Aucune bannière</div>
-    </mat-card-content>
-  </mat-card>
-  <button mat-mini-fab class="add-banner-floating-btn" (click)="createNewBanner()">
-      <mat-icon>add</mat-icon>
-  </button>
-  <mat-sidenav #sidenav mode="over" class="banner-form-card">
-    <app-banner-form (added)="onBannerAdded()" [newBanner]="newBanner"></app-banner-form>
-  </mat-sidenav>
+                <thead>
+                    <tr>
+                        <th>Bannière</th>
+
+                        <th (click)="sortBanners('begin')">
+
+                            <div class="sortable">
+                                <mat-icon>{{ getArrowState('begin') }}</mat-icon>
+                                <span>Date de début</span>
+                            </div>
+                        </th>
+
+                        <th (click)="sortBanners('end')">
+
+                            <div class="sortable">
+                                <mat-icon>{{ getArrowState('end') }}</mat-icon>
+                                <span>Date de fin</span>
+                            </div>
+                        </th>
+
+                        <th>Envoyer pour</th>
+                        <th>Tout le temps</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let b of banners | async; let i = index" rel="">
+
+                        <ng-container *ngIf="bannerHasPicture(b)">
+
+                            <td><img [src]="b.picture"></td>
+                            <td>{{b.begin | amDateFormat: 'DD-MM-YYYY'}}</td>
+                            <td>{{b.end | amDateFormat: 'DD-MM-YYYY'}}</td>
+                            <td>{{b.companies | aliciaKeys}}</td>
+                            <td>{{b.isDefault}}</td>
+                            <td>
+                                <button mat-button color="warn" (click)="deleteBanner(b, i)">Supprimer</button>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div *ngIf="!banners">Aucune bannière</div>
+        </mat-card-content>
+    </mat-card>
+
+    <button mat-mini-fab class="add-banner-floating-btn" (click)="createNewBanner()">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-sidenav #sidenav mode="over" class="banner-form-card">
+        <app-banner-form (added)="onBannerAdded()" [newBanner]="newBanner"></app-banner-form>
+    </mat-sidenav>
+
 </mat-sidenav-container>

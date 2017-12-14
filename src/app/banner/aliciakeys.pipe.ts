@@ -4,7 +4,9 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "aliciaKeys"
 })
 export class AliciaKeys implements PipeTransform {
+
   transform(value: any, arg: string[]): string {
+
     return value
       ? Object.entries(value)
           .filter(([key, value]) => value)

@@ -1,147 +1,133 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+/**
+ * Librairies
+ */
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { MatSidenav } from '@angular/material';
 
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
+import { Observable } from "rxjs";
 
 import * as moment from 'moment';
 
-import {Banner} from './banner.model';
-import {BannerService} from './banner.service';
+/**
+ * Redux related
+ */
+import { Store } from 'redux';
+import { NgRedux, select } from '@angular-redux/store';
 
-import {MatSidenav} from '@angular/material';
+import { Action } from '../redux/action';
+import { store } from '../redux/store';
 
-import { Store } from '../redux/store';
+import { AppStateType, Loading } from '../redux/app.state';
 
-const s = new Store();
+/**
+ * Component related
+ */
+import { Banner } from './banner.model';
+import { BannerService } from './banner.service';
 
 @Component({
-  selector: 'app-banner',
-  templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss']
+    selector: 'app-banner',
+    templateUrl: './banner.component.html',
+    styleUrls: ['./banner.component.scss'],
+    providers: [Action]
 })
 export class BannerComponent implements OnInit {
-  @ViewChild('sidenav') private sidenav: MatSidenav;
-  public banners: Banner[] = [];
-  public sortStatus = {begin: 'asc', end: ''};
-  public newBanner = new Banner();
 
-  constructor(private bannerService: BannerService) {
-  }
+    @ViewChild('sidenav') private sidenav: MatSidenav;
+    @select() banners: Observable<Banner[]>;
+    @select() loading: Observable<Loading>;
 
-  ngOnInit() {
-    this.loadBanners();
-  }
+    public sortStatus = { begin: 'asc', end: '' };
+    public newBanner: Banner = new Banner();
 
-  onBannerAdded() {
-    this.sidenav.close();
-    this.loadBanners();
-  }
+    constructor(
+        private bannerService: BannerService,
+        private action: Action,
+        private ngRedux: NgRedux<AppStateType>
+    ) {}
 
-  loadBanners() {
-
-    // this.bannerService
-    //   .loadBanners()
-    //   .subscribe(
-    //     response => (this.banners = response),
-    //     error => console.log(error)
-    //   );
-
-    this.banners = s.getState().banners;
-    console.log('this.banners', this.banners);
-  }
-
-  createNewBanner() {
-
-    s.dispatch('ADD_BANNER', {
-      "path":"/assets/banners/1513011575778.jpg",
-      "begin":"2017-12-11T14:29:21.034Z",
-      "end":"2018-01-11T14:29:21.034Z",
-      "id":1513011575983,
-      "companies":{"js":false,"ux":true,"iot":false},
-      "isDefault":false
-    });
-
-    this.loadBanners();
-    // this.sidenav.open();
-    // this.newBanner = new Banner();
-  }
-
-  sortBanners(propertyName) {
-
-    Object.entries(this.sortStatus).forEach(([key, value]) => {
-      if (propertyName !== key) {
-        this.sortStatus[key] = '';
-      }
-    });
-
-    if (
-      this.sortStatus[propertyName] === '' ||
-      this.sortStatus[propertyName] === 'desc'
-    ) {
-      this.sortStatus[propertyName] = 'asc';
-    } else {
-      this.sortStatus[propertyName] = 'desc';
+    ngOnInit() {
+        this.loadBanners();
     }
 
-    this.banners.sort((a, b) => {
-      const aDate = moment(a[propertyName]);
-      const bDate = moment(b[propertyName]);
-
-      let result;
-
-      if (aDate.isSame(bDate)) {
-        result = 0;
-      } else if (aDate.isBefore(bDate)) {
-        result = 1;
-      } else {
-        result = -1;
-      }
-
-      if (this.sortStatus[propertyName] === 'desc') {
-        result *= -1;
-      }
-
-      return result;
-    });
-  }
-
-  getArrowState(key) {
-
-    let icon = 'arrow_drop_up';
-
-    if ( this.sortStatus[key] === 'asc' ) {
-      icon = 'arrow_drop_down';
+    loadBanners() {
+        this.action.getBanners();
     }
 
-    return icon;
-  }
-
-  getBannerPicture(banner) {
-
-    if(!banner.loading) {
-      banner.loading = true;
-
-      this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
-        banner.picture = url.data;
-      });
-    }
-  }
-
-  bannerHasPicture(banner) {
-
-    if(!banner.picture) {
-      this.getBannerPicture(banner);
-      return false;
+    onBannerAdded() {
+        this.sidenav.close();
     }
 
-    return true;
-  }
+    createNewBanner() {
+        this.sidenav.open();
+        this.newBanner = new Banner();
+    }
 
-  deleteBanner(b, index) {
+    reinitSortStatusKeys(propertyName) {
 
-    s.dispatch('REMOVE_BANNER', {index});
-    this.loadBanners();
-    // this.bannerService.deleteBanner(b).subscribe(() => this.loadBanners());
-  }
+        Object.entries(this.sortStatus).forEach(([key, value]) => {
+            if (propertyName !== key) {
+                this.sortStatus[key] = '';
+            }
+        });
+    }
+
+    getSortStatusByProperty(propertyName) {
+
+        const prop = this.sortStatus[propertyName];
+
+        if (prop === '' || prop === 'desc') {
+            return'asc';
+        }
+
+        return 'desc';
+    }
+
+    updateSortStatus(propertyName) {
+
+        this.reinitSortStatusKeys(propertyName);
+        this.sortStatus[propertyName] = this.getSortStatusByProperty(propertyName);
+    }
+
+    sortBanners(propertyName) {
+
+        this.updateSortStatus(propertyName);
+        this.action.sortBanners(this.sortStatus, propertyName);
+    }
+
+    getArrowState(key) {
+
+        let icon = 'arrow_drop_up';
+
+        if (this.sortStatus[key] === 'asc') {
+            icon = 'arrow_drop_down';
+        }
+
+        return icon;
+    }
+
+    getBannerPicture(banner) {
+
+        if (!banner.loading) {
+            banner.loading = true;
+
+            this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
+                banner.picture = url.data;
+            });
+        }
+    }
+
+    bannerHasPicture(banner) {
+
+        if (!banner.picture) {
+            this.getBannerPicture(banner);
+            return false;
+        }
+
+        return true;
+    }
+
+    deleteBanner(b) {
+        this.action.removeBanner(b);
+    }
 }
-

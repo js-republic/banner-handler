@@ -23,6 +23,7 @@
   ],
   "private": true,
   "dependencies": {
+    "@angular-redux/store": "^6.5.8-0",
     "@angular/animations": "^5.0.3",
     "@angular/cdk": "^5.0.0-rc.2",
     "@angular/common": "^5.0.3",
@@ -48,11 +49,15 @@
     "googleapis": "^23.0.0",
     "moment": "^2.18.1",
     "ng2-file-upload": "^1.2.1",
+    "node-sass": "^4.7.2",
     "npm-check-updates": "^2.13.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "per-env": "^1.0.2",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
     "rxjs": "^5.4.2",
+    "s3fs": "^2.5.0",
     "serve-static": "^1.13.1",
     "zone.js": "^0.8.14"
   },

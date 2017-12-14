@@ -35,8 +35,11 @@ export class AppComponent implements OnInit {
   setUser() {
     this.authService.getUser()
       .then(res => {
-        this.user.username = res.name;
-        this.user.imgURL = res.avatar;
+        if(res) {
+          this.user.username = res.name;
+          this.user.imgURL = res.avatar;
+        }
+
       });
   }
 }
