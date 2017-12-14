@@ -51,6 +51,8 @@ jobs:
             cd _site
 
             #create new git repository and add everything
+            git config --global circleci@circleci.com
+            git config --global user.name "CircleCI"
             git init
             git remote add heroku git@heroku.com:banner-handler.git
             git add .
