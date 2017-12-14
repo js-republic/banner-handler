@@ -1,6 +1,8 @@
 Email banner handler
 ---
 
+[![CircleCI](https://circleci.com/gh/js-republic/banner-handler.svg?style=svg)](https://circleci.com/gh/js-republic/banner-handler)
+
 ### Comment démarrer ?
 
 Tout d'abord, il vous faudra créer un fichier `.env` à la racine du projet. 
