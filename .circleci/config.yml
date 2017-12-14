@@ -29,7 +29,7 @@ jobs:
 
       - run: yarn test -- -sr -cc
       - store_test_results:
-                path: coverage/
+          path: coverage/
 
       - run: yarn build -- --prod
 
