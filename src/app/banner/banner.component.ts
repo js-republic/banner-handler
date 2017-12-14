@@ -15,7 +15,6 @@ import { Store } from 'redux';
 import { NgRedux, select } from '@angular-redux/store';
 
 import { Action } from '../redux/action';
-import { store } from '../redux/store';
 
 import { AppStateType, Loading } from '../redux/app.state';
 
@@ -40,6 +39,9 @@ export class BannerComponent implements OnInit {
     public sortStatus = { begin: 'asc', end: '' };
     public newBanner: Banner = new Banner();
 
+    public bannersCanBeShown: boolean = false;
+    public bannersAreLoading: boolean = true;
+
     constructor(
         private bannerService: BannerService,
         private action: Action,
@@ -48,10 +50,22 @@ export class BannerComponent implements OnInit {
 
     ngOnInit() {
         this.loadBanners();
+        this.handleLoading();
     }
 
     loadBanners() {
+
         this.action.getBanners();
+
+        this.banners.subscribe(banners => {
+            this.bannersCanBeShown = Boolean(banners.length);
+        });
+    }
+
+    handleLoading() {
+        this.loading.subscribe(loading => {
+            this.bannersAreLoading = Boolean(loading.banners);
+        })
     }
 
     onBannerAdded() {
@@ -125,6 +139,12 @@ export class BannerComponent implements OnInit {
         }
 
         return true;
+    }
+
+    bannersExists() {
+        console.log('this.banners.isEmpty()', this.banners);
+
+        return !this.banners.isEmpty();
     }
 
     deleteBanner(b) {

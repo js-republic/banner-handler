@@ -43,6 +43,7 @@ export const reducer: Reducer<AppStateType> = (state: AppStateType = AppState, a
         case 'GET_BANNERS':
 
             return {
+                ...state,
                 banners: state.banners,
                 loading: {
                     banners: true
@@ -52,6 +53,7 @@ export const reducer: Reducer<AppStateType> = (state: AppStateType = AppState, a
         case 'GET_BANNERS_SUCCESS':
 
             return {
+                ...state,
                 banners: action.payload,
                 loading: {
                     banners: false
@@ -86,8 +88,8 @@ export const reducer: Reducer<AppStateType> = (state: AppStateType = AppState, a
             });
 
             return {
-                banners: sortedBanners,
-                loading: state.loading
+                ...state,
+                banners: sortedBanners
             };
 
         default:

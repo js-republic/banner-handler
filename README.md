@@ -53,5 +53,3 @@ Puis, ajouter les domaines autorisés sur la [console Google API](https://consol
 Il faudra aussi mettre à jour la variable `GOOGLE_CALLBACK_URL` du fichier `.env` en conséquence.
 
 Enfin, il ne reste plus qu'à ce rendre sur l'url Ngrok, `https://42b1ca5d.ngrok.io` dans notre exemple.
-
-Adding redux

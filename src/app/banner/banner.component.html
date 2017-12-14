@@ -3,9 +3,9 @@
         <mat-card-content>
 
             <h2>Bannières</h2>
-            <div *ngIf="loading.banners">Loading ...</div>
+            <div *ngIf="bannersAreLoading">Loading ...</div>
 
-            <table class="banners" *ngIf="banners">
+            <table class="banners" *ngIf="bannersCanBeShown">
 
                 <thead>
                     <tr>
@@ -51,7 +51,7 @@
                 </tbody>
             </table>
 
-            <div *ngIf="!banners">Aucune bannière</div>
+            <div *ngIf="!bannersCanBeShown">Aucune bannière</div>
         </mat-card-content>
     </mat-card>
 

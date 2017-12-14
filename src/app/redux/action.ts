@@ -13,16 +13,14 @@ export class Action {
         private ngRedux: NgRedux<AppStateType>
     ) {}
 
-    getBanners() {
+    // Util function for each observable to be handled the same way with dispatch success and error
+    subscribe(observable, action) {
 
-        const action = 'GET_BANNERS';
-        this.ngRedux.dispatch({type: action});
-
-        this.bannerService.loadBanners().subscribe(banners => {
+        observable.subscribe(response => {
 
             this.ngRedux.dispatch({
                 type: `${action}_SUCCESS`,
-                payload: banners
+                payload: response
             });
 
         }, (error) => {
@@ -32,6 +30,15 @@ export class Action {
                 payload: error
             });
         });
+    }
+
+    getBanners() {
+
+        const action = 'GET_BANNERS';
+        this.ngRedux.dispatch({type: action});
+
+        const observable = this.bannerService.loadBanners();
+        this.subscribe(observable, action);
     }
 
     addBanner(banner) {
