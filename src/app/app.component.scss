@@ -1,17 +1,16 @@
-:host{
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-.app-content {
-  background-color: #fafafa;
+:host {
   display: flex;
-  flex: 1;
-  app-banner {
+  flex-direction: column;
+  min-height: 100vh;
+
+  .main-content {
+    background-color: #fafafa;
+    display: flex;
     flex: 1;
+  }
+
+  mat-toolbar {
+    justify-content: space-between;
   }
 }
 
-mat-toolbar {
-  justify-content: space-between;
-}

@@ -28,11 +28,11 @@ import { FileUploadModule } from 'ng2-file-upload';
  * App imports
  */
 
-import { BannerComponent } from './banner.component';
+import { BannersComponent } from './banner.component';
 import { FormComponent } from './form/form.component';
 
-import { BannerService } from './banner.service';
-import { BannerServiceMock } from './banner.service.mock';
+import { BannerService } from './banner/banner.service';
+import { BannerServiceMock } from './banner/banner.service.mock';
 
 import { AliciaKeys } from './aliciakeys.pipe';
 
@@ -56,22 +56,22 @@ const imports = [
 ];
 
 const declarations = [
-  BannerComponent,
+  BannersComponent,
   FormComponent,
   AliciaKeys
 ];
 
 describe('BannerComponent', () => {
 
-  let component: BannerComponent;
-  let fixture: ComponentFixture<BannerComponent>;
+  let component: BannersComponent;
+  let fixture: ComponentFixture<BannersComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports,
       declarations
     })
-    .overrideComponent(BannerComponent, {
+    .overrideComponent(BannersComponent, {
       set: {
         providers: [
           {
@@ -85,7 +85,7 @@ describe('BannerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BannerComponent);
+    fixture = TestBed.createComponent(BannersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

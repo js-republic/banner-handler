@@ -28,25 +28,25 @@ import {AppComponent} from './app.component';
 
 import {LoginComponent} from './login/login.component';
 import {UserInfosComponent} from './user-infos/user-infos.component';
-import {FormComponent} from './banner/form/form.component';
-import {BannerComponent} from './banner/banner.component';
+import {FormComponent} from './banners/form/form.component';
+import {BannersComponent} from './banners/banners.component';
 
-import {BannerService} from './banner/banner.service';
+import {BannerService} from './banners/banner/banner.service';
 import {AuthService} from './auth/auth.service';
 
 /* The best */
-import {AliciaKeys} from './banner/aliciakeys.pipe';
+import {AliciaKeys} from './banners/aliciakeys.pipe';
 
 import {AuthGard} from './auth/auth.guard';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'main', component: BannerComponent, canActivate: [AuthGard]},
+  {path: 'main', component: BannersComponent, canActivate: [AuthGard]},
   {path: '', redirectTo: '/main', pathMatch: 'full'}
 ];
 
 @NgModule({
-  declarations: [AppComponent, BannerComponent, UserInfosComponent, LoginComponent, AliciaKeys, FormComponent],
+  declarations: [AppComponent, BannersComponent, UserInfosComponent, LoginComponent, AliciaKeys, FormComponent],
   imports: [
     BrowserModule,
     FormsModule,

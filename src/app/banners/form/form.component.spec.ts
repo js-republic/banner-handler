@@ -22,9 +22,9 @@ import { FileUploadModule } from 'ng2-file-upload';
 
 import { FormComponent } from './form.component';
 
-import { Banner } from '../banner.model';
-import { BannerService } from '../banner.service';
-import { BannerServiceMock } from '../banner.service.mock';
+import { Banner } from '../banner/banner.model';
+import { BannerService } from '../banner/banner.service';
+import { BannerServiceMock } from '../banner/banner.service.mock';
 
 const declarations = [
   FormComponent

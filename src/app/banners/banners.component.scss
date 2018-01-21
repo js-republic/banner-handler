@@ -1,6 +1,6 @@
 :host {
   display: flex;
-  flex:1;
+  flex: 1;
   flex-direction: column;
   mat-sidenav-container {
     flex: 1;
@@ -12,6 +12,7 @@
 
     mat-card {
       margin: 20px;
+
       .banners {
         width: 100%;
         border-collapse: collapse;
@@ -39,10 +40,9 @@
       }
     }
   }
-}
-
-.add-banner-floating-btn {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
+  .add-banner-floating-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+  }
 }

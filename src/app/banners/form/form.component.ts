@@ -8,8 +8,8 @@ import {
 
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 
-import {Banner} from '../banner.model';
-import {BannerService} from '../banner.service';
+import {Banner} from '../banner/banner.model';
+import {BannerService} from '../banner/banner.service';
 
 @Component({
   selector: 'app-banner-form',
