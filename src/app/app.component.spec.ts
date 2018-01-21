@@ -1,26 +1,29 @@
-import {async, TestBed} from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
-import {MatToolbarModule} from '@angular/material';
+import { MatToolbarModule } from '@angular/material';
 
-import {AppComponent} from './app.component';
-import {UserInfosComponent} from './user-infos/user-infos.component';
-import {AuthService} from './auth/auth.service';
-import {AuthServiceMock} from './auth/auth.service.mock';
-import {RouterTestingModule} from '@angular/router/testing';
+import { AppComponent } from './app.component';
+import { UserInfosComponent } from './user-infos/user-infos.component';
+import { AuthService } from './auth/auth.service';
+import { AuthServiceMock } from './auth/auth.service.mock';
+import { RouterTestingModule } from '@angular/router/testing';
+import { LoaderComponent } from './loader/loader.component';
+import { LoadingService } from './loader/loading.service';
 
 describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: AuthService, useValue: AuthServiceMock}
+        { provide: AuthService, useValue: AuthServiceMock },
+        LoadingService
       ],
       imports: [
         MatToolbarModule,
         RouterTestingModule
       ],
       declarations: [
-        AppComponent, UserInfosComponent
+        AppComponent, UserInfosComponent, LoaderComponent
       ]
     }).compileComponents();
   }));
