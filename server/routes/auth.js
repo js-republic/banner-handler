@@ -1,14 +1,32 @@
-const passport = require("passport");
-const router = require("express").Router();
-const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-const session = require("express-session");
-const axios = require('axios');
+const passport = require('passport');
+const router = require('express').Router();
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const cookieSession = require('cookie-session');
 const env = require('../env');
 
 const GOOGLE_SCOPE = [
-  "https://www.googleapis.com/auth/plus.login",
-  "https://www.googleapis.com/auth/admin.directory.group.readonly"
+  'https://www.googleapis.com/auth/userinfo.email',
+  'https://www.googleapis.com/auth/userinfo.profile'
 ];
+const HALF_HOUR = 30 * 60 * 1000;
+
+function isUserBelongToAllowedUserList(profile) {
+  const email = profile.emails[0].value;
+  const allowedMails = env.GOOGLE_ALLOWED_MAILS.mails;
+
+  return new Promise((resolve, reject) => {
+    if (allowedMails.indexOf(email) !== -1) {
+      resolve({
+        id: profile.id,
+        name: profile.displayName,
+        email,
+        avatar: profile.photos.shift().value
+      });
+    } else {
+      reject();
+    }
+  })
+}
 
 passport.use(new GoogleStrategy({
     clientID: env.GOOGLE_CLIENT_ID,
@@ -16,63 +34,28 @@ passport.use(new GoogleStrategy({
     callbackURL: env.GOOGLE_CALLBACK_URL,
   }, (accessToken, refreshToken, profile, done) => {
 
-    // isUserBelongToAllowedGroup(accessToken, profile.id)
-    //   .then(() => {
-        return done(null, {
-          id: profile.id,
-          name: profile.displayName,
-          avatar: profile.photos.shift().value
-        });
-      // })
-      // .catch(e => done(e));
+    isUserBelongToAllowedUserList(profile)
+      .then(user => done(null, user))
+      .catch(e => done(e));
   })
 );
 
-router.get("/user", (req, res) => res.json(req.user));
-router.get("/google", passport.authenticate("google", {scope: GOOGLE_SCOPE}));
-router.get("/google/callback", passport.authenticate("google", {successRedirect: '/main', failureRedirect: "/login"}));
+router.get('/user', (req, res) => res.json(req.user));
+router.get('/google', passport.authenticate('google', {scope: GOOGLE_SCOPE}));
+router.get('/google/callback', passport.authenticate('google', {successRedirect: '/main', failureRedirect: '/login'}));
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-function isUserBelongToAllowedGroup(accessToken, userID) {
-
-  console.log('accessToken', accessToken);
-  console.log('userID', userID);
-
-  const apiKey = "AIzaSyBwt4FYouaqBaT2sykmhAEo6kLNucs1gJI";
-
-  return axios
-    .get(`https://www.googleapis.com/admin/directory/v1/groups?userKey=${userID}&key=${apiKey}`, {
-      "headers": {
-      }
-    })
-    .then(({data: {groups}}) => {
-      const foundGroup = groups.find(group => group.email === env.GOOGLE_ALLOWED_GROUP);
-
-      console.log('foundGroup', foundGroup);
-
-      if (!foundGroup) {
-        throw new Error(`The user doesn't belong to ${env.GOOGLE_ALLOWED_GROUP}`);
-      }
-      return foundGroup;
-    })
-    .catch(e => {
-      throw new Error(`You don't have the permission to request groups from admin directory`);
-    })
-}
-
 module.exports = {
   handleAuthRoutes(app) {
-    app.use(session({
-      name: 'JSESSION',
-      cookie: {maxAge: 60000},
-      secret: 'js-republic secret',
-      resave: false,
-      saveUninitialized: false
+    app.use(cookieSession({
+      name:"session",
+      maxAge : HALF_HOUR,
+      secret : env.COOKIE_SECRET
     }));
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use("/auth", router);
+    app.use('/auth', router);
   },
   ensureAuthenticated(req, res, next) {
 

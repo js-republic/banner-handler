@@ -34,8 +34,6 @@ import {BannerComponent} from './banner/banner.component';
 import {BannerService} from './banner/banner.service';
 import {AuthService} from './auth/auth.service';
 
-import {BannerDataSource} from './banner/banner.datasource';
-
 /* The best */
 import {AliciaKeys} from './banner/aliciakeys.pipe';
 
@@ -70,13 +68,11 @@ const appRoutes: Routes = [
     MatSidenavModule,
     RouterModule.forRoot(
       appRoutes,
-      // {enableTracing: true} // <-- debugging purposes only
     ),
     MomentModule
   ],
   providers: [
     BannerService,
-    BannerDataSource,
     AuthGard,
     AuthService,
     {provide: LOCALE_ID, useValue: 'fr-FR'}

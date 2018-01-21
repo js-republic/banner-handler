@@ -96,7 +96,7 @@ router.post("/upload", ensureAuthenticated, (req, res) => {
       .uploadBanner(bannerFolder, fieldname, file, filename)
       .then(newFilename => res.send({data: newFilename}))
       .catch(e => {
-        console.log('e', e);
+        console.error('Error during uploading', e);
         res.status(500).send(e.message);
       });
   });
