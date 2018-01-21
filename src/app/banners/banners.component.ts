@@ -5,17 +5,17 @@ import 'rxjs/add/operator/map';
 
 import * as moment from 'moment';
 
-import {Banner} from './banner.model';
-import {BannerService} from './banner.service';
+import {Banner} from './banner/banner.model';
+import {BannerService} from './banner/banner.service';
 
 import {MatSidenav} from '@angular/material';
 
 @Component({
-  selector: 'app-banner',
-  templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss']
+  selector: 'app-banners',
+  templateUrl: './banners.component.html',
+  styleUrls: ['./banners.component.scss']
 })
-export class BannerComponent implements OnInit {
+export class BannersComponent implements OnInit {
   @ViewChild('sidenav') private sidenav: MatSidenav;
   public banners: Banner[] = [];
   public sortStatus = {begin: 'asc', end: ''};

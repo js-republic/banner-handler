@@ -5,48 +5,27 @@ import { FormsModule } from '@angular/forms';
 
 import {
   MatButtonModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatToolbarModule,
   MatCardModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatIconModule,
-  MatSortModule,
   MatCheckboxModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatNativeDateModule,
   MatProgressBarModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatSortModule,
+  MatToolbarModule
 } from '@angular/material';
 
 import { FileUploadModule } from 'ng2-file-upload';
 
 import { FormComponent } from './form.component';
 
-import { Banner } from '../banner.model';
-import { BannerService } from '../banner.service';
-import { BannerServiceMock } from '../banner.service.mock';
-
-const declarations = [
-  FormComponent
-];
-
-const imports = [
-  FormsModule,
-  MatButtonModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatToolbarModule,
-  MatCardModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatIconModule,
-  MatSortModule,
-  MatCheckboxModule,
-  MatProgressBarModule,
-  MatSidenavModule,
-  FileUploadModule,
-  BrowserAnimationsModule
-];
+import { Banner } from '../banner/banner.model';
+import { BannerService } from '../banner/banner.service';
+import { BannerServiceMock } from '../banner/banner.service.mock';
+import { LoadingService } from '../../loader/loading.service';
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -54,20 +33,41 @@ describe('FormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports,
-      declarations
+      providers: [
+        LoadingService
+      ],
+      imports: [
+        FormsModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        MatSortModule,
+        MatCheckboxModule,
+        MatProgressBarModule,
+        MatSidenavModule,
+        FileUploadModule,
+        BrowserAnimationsModule,
+      ],
+      declarations: [
+        FormComponent
+      ]
     })
-    .overrideComponent(FormComponent, {
-      set: {
-        providers: [
-          {
-            provide: BannerService,
-            useValue: new BannerServiceMock(null)
-          }
-        ]
-      }
-    })
-    .compileComponents();
+      .overrideComponent(FormComponent, {
+        set: {
+          providers: [
+            {
+              provide: BannerService,
+              useValue: new BannerServiceMock(null, null)
+            }
+          ]
+        }
+      })
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -94,7 +94,7 @@ describe('FormComponent', () => {
     let buttonSave;
     let imgPreview;
 
-    function expectResult({attr, img}) {
+    function expectResult({ attr, img }) {
 
       compiled = fixture.debugElement.nativeElement;
 
