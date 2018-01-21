@@ -1,4 +1,3 @@
-const fs        = require('fs');
 const moment    = require('moment');
 const S3FS      = require('s3fs');
 const env       = require('../env');
