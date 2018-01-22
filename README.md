@@ -7,7 +7,7 @@ Email banner handler
 
 En tant qu'administrateur du domaine Google, pour intégrer les images gérer par 
 l'outil, il faut faire appel à l'url :
-[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random]
+(http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random)
 
 > A noter que cette url renvoie une redirection vers la vraie url de l'image. Ainsi, les proxy
 d'entreprise sont capables de garder en cache l'image une fois le choix aléatoire éffectué.
@@ -16,20 +16,20 @@ Cette url, retourne de façon aléatoire une des images téléchargées sur l'ou
 cependant que l'image soit disponible de façon permanente ou que ses dates de mise à
 disposition correspondent à la date d'aujourd'hui.
 
-> L'outil privilégira d'abort les images qui ont une dates de début et fin définies, et
+> L'outil privilégira d'abord  les images qui ont une dates de début et fin définies, et
 seulement si il n'en trouve pas, il prendra une des images disponibles tout le temps.
 
 
 Si on veut filtrer par société, il suffit de rajouter le paramètre `company` dans l'url.
 Ainsi, si l'on veut ne récupérer que les images autorisées à ce moment là et venant de JS-Republic
 par exemple, on fera appel à l'url :
-[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=js]
+(http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=js)
 
 Pour UX-Republic :
-[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=ux]
+(http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=ux)
 
 Pour IoT-Republic :
-[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=iot]
+(http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=iot)
 
 ### Comment démarrer ?
 
@@ -39,7 +39,7 @@ l'applicaiton. Ce fichier n'est donc pas à commiter.
 
 Vous pouvez partir de ce template pour créer le fichier :
 
-```properties
+```dotenv
 PORT=3000
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
