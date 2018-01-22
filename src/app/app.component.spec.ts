@@ -45,6 +45,6 @@ describe('AppComponent', () => {
 
     const selectorText = compiled.querySelector('mat-toolbar span').textContent;
 
-    expect(selectorText).toContain('Gestionnaire de bannière d\'Email');
+    expect(selectorText).toBe('Gestionnaire de bannière d\'Email');
   }));
 });

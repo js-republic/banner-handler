@@ -120,7 +120,7 @@ describe('FormComponent', () => {
 
     expectResult({
       attr: null,
-      img: 'url("' + imgTestPath + '")'
+      img: 'url(' + imgTestPath + ')'
     });
   });
 });
