@@ -3,6 +3,34 @@ Email banner handler
 
 [![CircleCI](https://circleci.com/gh/js-republic/banner-handler.svg?style=svg)](https://circleci.com/gh/js-republic/banner-handler)
 
+### Intégration dans Gmail
+
+En tant qu'administrateur du domaine Google, pour intégrer les images gérer par 
+l'outil, il faut faire appel à l'url :
+[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random]
+
+> A noter que cette url renvoie une redirection vers la vraie url de l'image. Ainsi, les proxy
+d'entreprise sont capables de garder en cache l'image une fois le choix aléatoire éffectué.
+ 
+Cette url, retourne de façon aléatoire une des images téléchargées sur l'outil. Il faut
+cependant que l'image soit disponible de façon permanente ou que ses dates de mise à
+disposition correspondent à la date d'aujourd'hui.
+
+> L'outil privilégira d'abort les images qui ont une dates de début et fin définies, et
+seulement si il n'en trouve pas, il prendra une des images disponibles tout le temps.
+
+
+Si on veut filtrer par société, il suffit de rajouter le paramètre `company` dans l'url.
+Ainsi, si l'on veut ne récupérer que les images autorisées à ce moment là et venant de JS-Republic
+par exemple, on fera appel à l'url :
+[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=js]
+
+Pour UX-Republic :
+[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=ux]
+
+Pour IoT-Republic :
+[http://banner-handler-prod.eu-central-1.elasticbeanstalk.com/banner/random?company=iot]
+
 ### Comment démarrer ?
 
 Tout d'abord, il vous faudra créer un fichier `.env` à la racine du projet. 
