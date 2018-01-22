@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "per-env",
     "start:wiwi": "yarn start:client & yarn start:server",
-    "start:development": "stmux -- [ [ 'yarn start:client' : 'yarn start:server' ] .. 'yarn test' ]",
+    "start:development": "stmux -- [ [ 'yarn start:client' : 'yarn start:server' ] .. 'yarn test:watch' ]",
     "start:production": "node ./server",
     "start:client": "ng build --watch",
     "start:server": "nodemon ./server -w ./server -w .env",
@@ -20,7 +20,7 @@
   },
   "jest": {
     "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts",
+    "setupTestFrameworkScriptFile": "<rootDir>/.test-config/setupJest.ts",
     "bail" : true
   },
   "contributors": [
@@ -51,7 +51,7 @@
     "core-js": "^2.4.1",
     "envalid": "^4.1.1",
     "express": "^4.15.4",
-    "googleapis": "^23.0.0",
+    "googleapis": "^25.0.0",
     "moment": "^2.18.1",
     "ng2-file-upload": "^1.2.1",
     "npm-check-updates": "^2.13.0",
@@ -64,20 +64,20 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.5.4",
+    "@angular/cli": "1.6.5",
     "@angular/compiler-cli": "^5.0.3",
     "@angular/language-service": "^5.0.3",
     "@types/jasmine": "~2.8.2",
     "@types/jasminewd2": "~2.0.2",
     "@types/jest": "^22.0.1",
-    "@types/node": "~8.0.53",
-    "codelyzer": "~4.0.1",
+    "@types/node": "~9.3.0",
+    "codelyzer": "~4.1.0",
     "dotenv": "^4.0.0",
-    "jasmine-core": "~2.8.0",
+    "jasmine-core": "~2.9.1",
     "jasmine-spec-reporter": "~4.2.1",
     "jest": "^22.1.4",
     "jest-preset-angular": "^5.0.0",
-    "karma": "~1.7.0",
+    "karma": "~2.0.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^1.2.1",
@@ -86,8 +86,8 @@
     "nodemon": "^1.12.0",
     "protractor": "~5.2.0",
     "stmux": "^1.4.18",
-    "ts-node": "~3.3.0",
-    "tslint": "~5.8.0",
-    "typescript": "~2.4.2"
+    "ts-node": "~4.1.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.6.2"
   }
 }
