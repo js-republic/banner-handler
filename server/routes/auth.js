@@ -12,7 +12,7 @@ const HALF_HOUR = 30 * 60 * 1000;
 
 function isUserBelongToAllowedUserList(profile) {
   const email = profile.emails[0].value;
-  const allowedMails = env.GOOGLE_ALLOWED_MAILS.mails;
+  const allowedMails = env.GOOGLE_ALLOWED_MAILS.split(',').map(rawMail => rawMail.trim());
 
   return new Promise((resolve, reject) => {
     if (allowedMails.indexOf(email) !== -1) {

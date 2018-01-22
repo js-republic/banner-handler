@@ -14,7 +14,6 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -28,6 +27,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: yarn test -- -sr -cc
+
       - store_test_results:
           path: coverage/
 
@@ -36,32 +36,10 @@ jobs:
 
       - run: yarn build -- --prod
 
-      - run: bash .circleci/setup-heroku.sh
-
-      - add_ssh_keys:
-          fingerprints:
-            - "78:73:d5:14:4b:b9:99:4f:83:1a:d8:96:3b:6d:b6:ae"
-
-      - run:
-          name: Deploy Master to Heroku
-          command: |
-            mkdir _site
-            cp -R package.json _site
-            cp -R dist _site
-            cp -R server _site
-
-            #change to whichever directory this lives in
-            cd _site
-
-            #create new git repository and add everything
-            git config --global user.email "circleci@circleci.com"
-            git config --global user.name "CircleCI"
-            git init
-            git remote add heroku git@heroku.com:banner-handler.git
-            git add .
-            git commit -m "deployment ..."
-            git push --force heroku master
-            rm -fr .git
-
-            #go back to wherever we started.
-            cd -
+      - run: sudo apt-get install python3.4
+      - run: sudo apt-get update && sudo apt-get install -y python-pip libpython-dev python-dev
+      - run: pip install awsebcli --upgrade --user
+      - run: |
+          if [ "${CIRCLE_BRANCH}" == "master" ];
+            then ~/.local/bin/eb deploy banner-hander-prod;
+          fi

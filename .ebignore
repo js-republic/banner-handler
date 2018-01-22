@@ -1,0 +1,12 @@
+.circleci
+.idea
+doc
+e2e
+src
+node_modules
+.angular-cli.json
+tsconfig.json
+tslint.json
+karma.conf.js
+protractor.conf.js
+*.md
