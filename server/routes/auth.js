@@ -40,7 +40,7 @@ passport.use(new GoogleStrategy({
   })
 );
 
-router.get('/user', (req, res) => res.json(req.user));
+router.get('/user', (req, res) => req.user && req.user.id ? res.json(req.user) : res.sendStatus(401));
 router.get('/google', passport.authenticate('google', {scope: GOOGLE_SCOPE}));
 router.get('/google/callback', passport.authenticate('google', {successRedirect: '/main', failureRedirect: '/login'}));
 passport.serializeUser((user, done) => done(null, user));
@@ -49,9 +49,9 @@ passport.deserializeUser((user, done) => done(null, user));
 module.exports = {
   handleAuthRoutes(app) {
     app.use(cookieSession({
-      name:"session",
-      maxAge : HALF_HOUR,
-      secret : env.COOKIE_SECRET
+      name: 'session',
+      maxAge: HALF_HOUR,
+      secret: env.COOKIE_SECRET
     }));
     app.use(passport.initialize());
     app.use(passport.session());
