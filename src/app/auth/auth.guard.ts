@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthGard implements CanActivate {
@@ -8,24 +9,14 @@ export class AuthGard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {
   }
 
-  canActivate(next: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot): Promise<boolean> {
-    return this.authService.getUser()
-      .then(user => {
-        return true;
-      })
-      .catch(e => {
-
-        const env = localStorage.getItem('testEnv');
-
-        console.log('env', env);
-
-        if (env && env === 'true') {
-          return true;
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.authService.user
+      .map(user => {
+        const shouldPass = !!user;
+        if (!shouldPass) {
+          this.router.navigate(['login']);
         }
-
-        this.router.navigate(['/login']);
-        return false;
+        return shouldPass;
       });
   }
 }

@@ -1,7 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, NavigationStart} from '@angular/router';
-
-import {AuthService} from './auth/auth.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -10,33 +7,11 @@ import {AuthService} from './auth/auth.service';
 })
 
 export class AppComponent implements OnInit {
-  user: any = {};
-  isLogged = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.listenRouterEvent();
   }
 
-  listenRouterEvent() {
-    this.isLogged = false;
-    this.router.events.forEach(event => {
-      if (event instanceof NavigationStart) {
-        if (event.url !== '/login') {
-          this.isLogged = true;
-          this.setUser();
-        }
-      }
-    });
-  }
-
-  setUser() {
-    this.authService.getUser()
-      .then(res => {
-        this.user.username = res.name;
-        this.user.imgURL = res.avatar;
-      });
-  }
 }
