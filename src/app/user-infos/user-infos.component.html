@@ -1,4 +1,4 @@
-<figure *ngIf="username && imgURL">
-  <figcaption>{{ username }}</figcaption>
-  <img src="{{ imgURL }}" alt="Icon user" width="32" height="32" />
+<figure *ngIf="user">
+  <figcaption>{{ user.name }}</figcaption>
+  <img src="{{ user.avatar }}" alt="Icon user" width="32" height="32"/>
 </figure>

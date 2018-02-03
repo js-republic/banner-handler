@@ -1,4 +1,6 @@
-import {Component, Input} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { User } from '../auth/user';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -6,7 +8,13 @@ import {Component, Input} from '@angular/core';
   templateUrl: './user-infos.component.html',
   styleUrls: ['./user-infos.component.scss']
 })
-export class UserInfosComponent {
-  @Input() username: string;
-  @Input() imgURL: string;
+export class UserInfosComponent implements OnInit {
+  user?: User;
+
+  constructor(private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.authService.user.subscribe(user => this.user = user);
+  }
 }
