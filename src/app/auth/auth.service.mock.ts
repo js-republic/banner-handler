@@ -1,11 +1,10 @@
 import { User } from './user';
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 @Injectable()
-export class AuthServiceMock extends AuthService {
+export class AuthServiceMock {
 
-  public user: Observable<User> = of(new User('1', '', ''));
+  public readonly user: Observable<User> = of(new User('1', '', ''));
 }
