@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "aliciaKeys"
+  name: 'aliciaKeys'
 })
 export class AliciaKeys implements PipeTransform {
   transform(value: any, arg: string[]): string {
@@ -9,7 +9,7 @@ export class AliciaKeys implements PipeTransform {
       ? Object.entries(value)
           .filter(([key, value]) => value)
           .map(([key, value]) => key)
-          .join(", ")
-      : "";
+          .join(', ')
+      : '';
   }
 }

@@ -26,7 +26,7 @@ export class FormComponent implements OnInit {
   }
 
   public banner: Banner;
-  public pictureLoaded: boolean = false;
+  public pictureLoaded = false;
   public uploader: FileUploader;
 
   constructor(private bannerService: BannerService, private el: ElementRef) {
@@ -64,7 +64,7 @@ export class FormComponent implements OnInit {
   showPreviewPicture() {
 
     const reader = new FileReader();
-    const element: any = document.querySelector(".upload-picture");
+    const element: any = document.querySelector('.upload-picture');
     const picture = element.files[0];
 
     reader.onload = (e: any) => {
@@ -114,7 +114,7 @@ export class FormComponent implements OnInit {
 
   getBannerPath(): string {
 
-    if(this.banner && this.banner.path) {
+    if (this.banner && this.banner.path) {
       return 'url(' + this.banner.path + ')';
     }
 

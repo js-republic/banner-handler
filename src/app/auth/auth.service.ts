@@ -10,7 +10,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class AuthService {
 
   private userSource: Subject<User> = new ReplaySubject<User>(1);
-  public readonly user: Observable<User> = this.userSource.asObservable();
+
+  public get user(): Observable<User> {
+    return this.userSource.asObservable();
+  }
 
   constructor(private http: HttpClient) {
     this.http.get<User>('auth/user')

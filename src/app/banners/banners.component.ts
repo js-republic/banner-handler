@@ -100,7 +100,7 @@ export class BannersComponent implements OnInit {
 
   getBannerPicture(banner) {
 
-    if(!banner.loading) {
+    if (!banner.loading) {
       banner.loading = true;
 
       this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
@@ -111,7 +111,7 @@ export class BannersComponent implements OnInit {
 
   bannerHasPicture(banner) {
 
-    if(!banner.picture) {
+    if (!banner.picture) {
       this.getBannerPicture(banner);
       return false;
     }

@@ -1,5 +1,5 @@
 import { AppPage } from './app.po';
-import { browser, by, element } from 'protractor';
+import { browser } from 'protractor';
 import * as path from 'path';
 
 describe('Banner Handler App', () => {
@@ -20,24 +20,24 @@ describe('Banner Handler App', () => {
     const authBtnText = page.select('app-login a span').getText();
     const bannerComponent = page.select('app-banner');
 
-    expect(pageTitle).toEqual("Gestionnaire de bannière d'Email");
+    expect(pageTitle).toEqual('Gestionnaire de bannière d\'Email');
 
     expect(authComponent.isPresent()).toBeTruthy();
-    expect(authBtnText).toEqual("Je m'authentifie avec Google");
+    expect(authBtnText).toEqual('Je m\'authentifie avec Google');
 
     expect(bannerComponent.isPresent()).toBeFalsy();
   });
 
   it('should evade login page with if test env is specified and display banners', () => {
 
-  	const authComponent = page.select('app-login');
-  	const bannerComponent = page.select('app-banner');
+    const authComponent = page.select('app-login');
+    const bannerComponent = page.select('app-banner');
 
-  	expect(authComponent.isPresent()).toBeFalsy();
-  	expect(bannerComponent.isPresent()).toBeTruthy();
+    expect(authComponent.isPresent()).toBeFalsy();
+    expect(bannerComponent.isPresent()).toBeTruthy();
   });
 
-  it("should display form when clicking on add banner button", () => {
+  it('should display form when clicking on add banner button', () => {
 
     const formClass = '.banner-form-card';
     const btnClass = '.add-banner-floating-btn';
@@ -53,7 +53,7 @@ describe('Banner Handler App', () => {
     expect(form.getCssValue('visibility')).toBe('visible');
   });
 
-  it("should pre-upload a picture and display it in preview in form", (done) => {
+  it('should pre-upload a picture and display it in preview in form', (done) => {
 
     const previewClass = '.img-container';
 

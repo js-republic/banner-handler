@@ -47,7 +47,15 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, BannersComponent, UserInfosComponent, LoginComponent, AliciaKeys, FormComponent, LoaderComponent],
+  declarations: [
+    AppComponent,
+    BannersComponent,
+    UserInfosComponent,
+    LoginComponent,
+    AliciaKeys,
+    FormComponent,
+    LoaderComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -67,9 +75,7 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     FileUploadModule,
     MatSidenavModule,
-    RouterModule.forRoot(
-      appRoutes,
-    ),
+    RouterModule.forRoot(appRoutes),
     MomentModule
   ],
   providers: [
@@ -81,5 +87,4 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

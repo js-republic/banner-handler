@@ -10,10 +10,10 @@ export class AppPage {
   }
 
   select(selector) {
-  	return element(by.css(selector));
+    return element(by.css(selector));
   }
 
-  setStorage(element, value) {
-  	return browser.executeScript('localStorage.setItem("' + element + '", "' + value + '");');
+  setStorage(el, value) {
+    return browser.executeScript('localStorage.setItem("' + el + '", "' + value + '");');
   }
 }
