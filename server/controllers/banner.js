@@ -17,9 +17,7 @@ class BannerController {
   }
 
   getBanners() {
-
     return this.getFs().readFile('/banners.json').then(buffer => {
-
       try {
         return JSON.parse(buffer.Body.toString('utf-8'));
       } catch (e) {
@@ -33,50 +31,49 @@ class BannerController {
   }
 
   insertBanner(banner) {
-
     return this.getBanners().then(banners => {
-
       banner.id = Date.now();
       banners[banner.id] = banner;
-
       return this.updateBanners(banners);
     });
   }
 
-  updateBanners(banners) {
-
-    const fsImpl = this.getFs();
-
-    return fsImpl.writeFile('banners.json', JSON.stringify(banners)).then(() => {
-      console.log('banners saved !');
-    }, function (reason) {
-      throw reason;
-    });
+  deleteBanner(id) {
+    const bannerId = id.toString();
+    return this.getBanners()
+      .then(banners => {
+        if (banners.hasOwnProperty(bannerId)) {
+          return banners;
+        } else {
+          throw new Error(`Banner (${bannerId}) not found`);
+        }
+      })
+      .then(banners => {
+        return Promise.all([banners, this.deleteImageQuietly(banners[bannerId].path)]);
+      })
+      .then(([banners]) => {
+        delete banners[bannerId];
+        return this.updateBanners(banners);
+      });
   }
 
-  deleteBanner(id) {
+  deleteImageQuietly(path) {
+    return this.getFs().unlink(path).catch((e) => console.log('Doesn\'t matter', e));
+  }
 
-    return this.getBanners().then(banners => {
-
-      if (banners.hasOwnProperty(id)) {
-
-        const bannerId = id.toString();
-        delete banners[bannerId];
-
-        return this.updateBanners(banners);
-
-      } else {
-        throw new Error(`Banner (${banner.id}) not found`);
-      }
-    });
+  updateBanners(banners) {
+    return this.getFs()
+      .writeFile('banners.json', JSON.stringify(banners))
+      .then(() => {
+        return banners;
+      }, (reason) => {
+        throw reason;
+      });
   }
 
   getRandomBanner(params) {
-
     return this.getBanners().then(banners => {
-
       const now = moment();
-
       const availableBanners = this.getValues(banners)
         .filter(this.containsCompany(params.company))
       ;
@@ -101,13 +98,10 @@ class BannerController {
   }
 
   containsCompany(companyName) {
-
     return (banner) => {
-
       if (companyName) {
         return banner.companies[companyName];
       }
-
       return true;
     }
   }
