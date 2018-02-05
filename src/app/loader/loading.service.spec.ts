@@ -1,15 +1,22 @@
-import { TestBed, inject } from '@angular/core/testing';
-
 import { LoadingService } from './loading.service';
 
 describe('LoadingService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [LoadingService]
+
+  it('should has onLoading false at the beginning', () => {
+    const loadingService = new LoadingService();
+
+    loadingService.onLoading.subscribe(value => {
+      expect(value).toBe(false);
     });
   });
 
-  it('should be created', inject([LoadingService], (service: LoadingService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should has onLoading true when isLoading is called with true', () => {
+    const loadingService = new LoadingService();
+
+    loadingService.isLoading = true;
+
+    loadingService.onLoading.subscribe(value => {
+      expect(value).toBe(true);
+    });
+  });
 });

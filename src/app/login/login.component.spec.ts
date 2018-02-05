@@ -4,14 +4,6 @@ import { MatCardModule } from '@angular/material';
 
 import { LoginComponent } from './login.component';
 
-const declarations = [
-  LoginComponent
-];
-
-const imports = [
-  MatCardModule
-];
-
 describe('LoginComponent', () => {
 
   let component: LoginComponent;
@@ -19,10 +11,14 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports,
-      declarations
+      imports: [
+        MatCardModule
+      ],
+      declarations: [
+        LoginComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

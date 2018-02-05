@@ -11,8 +11,8 @@
     "start:client": "ng build --watch",
     "start:server": "nodemon ./server -w ./server -w .env",
     "build": "ng build",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest src --coverage",
+    "test:watch": "yarn test -- --watch",
     "lint": "prettier --write --single-quote --print-width 80 src/**/*.ts && ng lint --fix",
     "e2e": "ng e2e",
     "e2e:watch": "watch \"ng e2e -s false\" src e2e --wait=1",
@@ -21,6 +21,7 @@
   "jest": {
     "preset": "jest-preset-angular",
     "setupTestFrameworkScriptFile": "<rootDir>/.test-config/setupJest.ts",
+    "coveragePathIgnorePatterns": ["/node_modules/", ".test-config", "dist", "e2e", "server"],
     "bail": true
   },
   "contributors": [
