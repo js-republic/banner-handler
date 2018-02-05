@@ -9,18 +9,31 @@ import { LoadingService } from './loader/loading.service';
 import { AuthService } from './auth/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { instance, mock, when } from 'ts-mockito';
+import { User } from './auth/user';
+import { of } from 'rxjs/observable/of';
 
 describe('AppComponent', () => {
   beforeEach(
     async(() => {
-      // const mockedAuthService = mock(AuthService);
-      // when(mockedAuthService.user).thenReturn(of(new User('1', 'Mathieu', '/avatar.png')));
+      const mockedAuthService = mock(AuthService);
+      when(mockedAuthService.user).thenReturn(
+        of(new User('1', 'Mathieu', '/avatar.png'))
+      );
+
       TestBed.configureTestingModule({
         providers: [
-          { provide: AuthService, useClass: AuthService },// instance(mockedAuthService) },
+          {
+            provide: AuthService,
+            useFactory: () => instance(mockedAuthService)
+          },
           LoadingService
         ],
-        imports: [MatToolbarModule, RouterTestingModule, HttpClientTestingModule],
+        imports: [
+          MatToolbarModule,
+          RouterTestingModule,
+          HttpClientTestingModule
+        ],
         declarations: [AppComponent, UserInfosComponent, LoaderComponent]
       }).compileComponents();
     })
