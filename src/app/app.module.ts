@@ -34,7 +34,7 @@ import { BannersComponent } from './banners/banners.component';
 import { BannerService } from './banners/banner/banner.service';
 import { AuthService } from './auth/auth.service';
 /* The best */
-import { AliciaKeys } from './banners/aliciakeys.pipe';
+import { AliciaKeys } from './commons/aliciakeys.pipe';
 
 import { AuthGard } from './auth/auth.guard';
 import { LoaderComponent } from './loader/loader.component';

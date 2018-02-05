@@ -1,10 +1,7 @@
-/**
- * Angular imports
- */
-
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {anyString, instance, mock, when} from 'ts-mockito';
 
 import {
   MatButtonModule,
@@ -21,27 +18,38 @@ import {
   MatToolbarModule
 } from '@angular/material';
 
-import { MomentModule } from 'angular2-moment';
-import { FileUploadModule } from 'ng2-file-upload';
+import {MomentModule} from 'angular2-moment';
+import {FileUploadModule} from 'ng2-file-upload';
 
-import { BannersComponent } from './banners.component';
-import { FormComponent } from './form/form.component';
+import {BannersComponent} from './banners.component';
+import {FormComponent} from './form/form.component';
 
-import { BannerService } from './banner/banner.service';
-import { BannerServiceMock } from './banner/banner.service.mock';
+import {BannerService} from './banner/banner.service';
 
-import { AliciaKeys } from './aliciakeys.pipe';
-import { LoadingService } from '../loader/loading.service';
+import {AliciaKeys} from '../commons/aliciakeys.pipe';
+import {LoadingService} from '../loader/loading.service';
+import {of} from 'rxjs/observable/of';
+import {Banner} from './banner/banner.model';
 
 describe('BannerComponent', () => {
 
   let component: BannersComponent;
+  let mockedBannerService: BannerService;
+  let mockedLoadingService: LoadingService;
   let fixture: ComponentFixture<BannersComponent>;
 
   beforeEach(async(() => {
+
+    mockedBannerService = mock(BannerService);
+    mockedLoadingService = mock(LoadingService);
+
+    when(mockedBannerService.loadBanners()).thenReturn(of([new Banner()]));
+    when(mockedBannerService.getImgUrlFromPath(anyString())).thenReturn(of(''));
+
     TestBed.configureTestingModule({
       providers: [
-        LoadingService
+        {provide: LoadingService, useValue: instance(mockedLoadingService)},
+        {provide: BannerService, useValue: instance(mockedBannerService)},
       ],
       imports: [
         FormsModule,
@@ -66,18 +74,7 @@ describe('BannerComponent', () => {
         FormComponent,
         AliciaKeys
       ]
-    })
-      .overrideComponent(BannersComponent, {
-        set: {
-          providers: [
-            {
-              provide: BannerService,
-              useValue: new BannerServiceMock(null, null)
-            }
-          ]
-        }
-      })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

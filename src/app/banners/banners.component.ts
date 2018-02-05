@@ -34,7 +34,6 @@ export class BannersComponent implements OnInit {
   }
 
   loadBanners() {
-
     this.bannerService
       .loadBanners()
       .subscribe(
@@ -49,7 +48,6 @@ export class BannersComponent implements OnInit {
   }
 
   sortBanners(propertyName) {
-
     Object.entries(this.sortStatus).forEach(([key, value]) => {
       if (propertyName !== key) {
         this.sortStatus[key] = '';
@@ -88,9 +86,7 @@ export class BannersComponent implements OnInit {
   }
 
   getArrowState(key) {
-
     let icon = 'arrow_drop_up';
-
     if ( this.sortStatus[key] === 'asc' ) {
       icon = 'arrow_drop_down';
     }
@@ -99,10 +95,8 @@ export class BannersComponent implements OnInit {
   }
 
   getBannerPicture(banner) {
-
     if (!banner.loading) {
       banner.loading = true;
-
       this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
         banner.picture = url.data;
       });
@@ -110,7 +104,6 @@ export class BannersComponent implements OnInit {
   }
 
   bannerHasPicture(banner) {
-
     if (!banner.picture) {
       this.getBannerPicture(banner);
       return false;
