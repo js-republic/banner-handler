@@ -1,15 +1,10 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  Output,
-  EventEmitter, Input
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 
 import {Banner} from '../banner/banner.model';
 import {BannerService} from '../banner/banner.service';
+import moment = require('moment');
 
 @Component({
   selector: 'app-banner-form',
@@ -38,7 +33,6 @@ export class FormComponent implements OnInit {
   }
 
   initUploader() {
-
     this.uploader = new FileUploader({
       url: '/banner/upload',
       itemAlias: 'picture'
@@ -46,9 +40,7 @@ export class FormComponent implements OnInit {
   }
 
   handleUploaderOverrides() {
-
     // override the onAfterAddingfile property of the uploader so it doesn't authenticate with //credentials.
-
     this.uploader.onAfterAddingFile = file => {
       file.withCredentials = false;
       this.showPreviewPicture();
@@ -62,7 +54,6 @@ export class FormComponent implements OnInit {
   }
 
   showPreviewPicture() {
-
     const reader = new FileReader();
     const element: any = document.querySelector('.upload-picture');
     const picture = element.files[0];
@@ -81,15 +72,16 @@ export class FormComponent implements OnInit {
   }
 
   handleBannerPeriod() {
-
     if (this.banner.isDefault) {
       this.banner.begin = null;
       this.banner.end = null;
+    } else {
+      this.banner.begin = moment(this.banner.begin).startOf('day').toDate();
+      this.banner.end = moment(this.banner.end).startOf('day').toDate();
     }
   }
 
   saveBanner() {
-
     this.handleBannerPeriod();
 
     // This event calls this.uploader.onCompleteItem when upload finished
@@ -98,7 +90,6 @@ export class FormComponent implements OnInit {
   }
 
   registerBanner() {
-
     this.bannerService.saveBanner(this.banner).subscribe(() => {
       this.added.emit();
     });
@@ -131,10 +122,5 @@ export class FormComponent implements OnInit {
 
   canShowSaveButton() {
     return !this.pictureLoaded;
-  }
-
-  inputCanBeShown() {
-    const testEnv = localStorage.getItem('testEnv');
-    return testEnv && testEnv === 'true';
   }
 }

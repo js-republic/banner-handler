@@ -15,7 +15,7 @@ export class BannerService {
     this.loadBanners();
   }
 
-  handleLoading(observable: Observable<any>) {
+  goToLoadingWhile(observable: Observable<any>) {
     this.loadingService.isLoading = true;
     return observable.do(
       () => this.loadingService.isLoading = false,
@@ -25,7 +25,7 @@ export class BannerService {
   }
 
   deleteBanner(banner: Banner) {
-    return this.handleLoading(this.http.delete(`/banner/${banner.id}`));
+    return this.goToLoadingWhile(this.http.delete(`/banner/${banner.id}`));
   }
 
   loadBanners(): Observable<Banner[]> {
@@ -33,7 +33,7 @@ export class BannerService {
   }
 
   saveBanner(banner): Observable<Banner> {
-    return this.handleLoading(
+    return this.goToLoadingWhile(
       this.http
         .post<Banner>('/banner', banner)
         .delay(1500)
@@ -45,6 +45,6 @@ export class BannerService {
   }
 
   uploadBanner(data): Observable<any> {
-    return this.handleLoading(this.http.post('/upload', data));
+    return this.goToLoadingWhile(this.http.post('/upload', data));
   }
 }
