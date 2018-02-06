@@ -8,6 +8,9 @@ import {Banner} from './banner.model';
 describe('BannerService', () => {
 
   let loadServiceMock: LoadingService;
+  let service: BannerService;
+  let httpMock: HttpTestingController;
+  let loadingService: LoadingService;
 
   function configureTestingModule() {
     TestBed.configureTestingModule({
@@ -17,6 +20,9 @@ describe('BannerService', () => {
         {provide: LoadingService, useValue: instance(loadServiceMock)}
       ],
     });
+    service = TestBed.get(BannerService);
+    loadingService = TestBed.get(LoadingService);
+    httpMock = TestBed.get(HttpTestingController);
   }
 
   beforeEach(() => {
@@ -26,8 +32,6 @@ describe('BannerService', () => {
   it('should send delete request when deleteBanner is called', () => {
     // given
     configureTestingModule();
-    const service: BannerService = TestBed.get(BannerService);
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
     const banner = new Banner('', new Date(), new Date(), '1234');
 
     // when
@@ -42,9 +46,6 @@ describe('BannerService', () => {
     // given
     configureTestingModule();
     const banner = new Banner('', new Date(), new Date(), '1234');
-    const loadingService: LoadingService = TestBed.get(LoadingService);
-    const service: BannerService = TestBed.get(BannerService);
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
 
     // when
     service.deleteBanner(banner).subscribe();
@@ -58,8 +59,6 @@ describe('BannerService', () => {
   it('should send get request when loadBanners is called', (done) => {
     // given
     configureTestingModule();
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
-    const service: BannerService = TestBed.get(BannerService);
     const expectedBanners = [
       new Banner('/avatar.jpg', new Date(), new Date(), '1'),
       new Banner('/avatar2.jpg', new Date(), new Date(), '2'),
@@ -80,8 +79,6 @@ describe('BannerService', () => {
   it('should send post request when saveBanner is called', () => {
     // given
     configureTestingModule();
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
-    const service: BannerService = TestBed.get(BannerService);
     const bannerToSave = new Banner('', new Date(), new Date(), '1234');
 
     // when
@@ -98,8 +95,6 @@ describe('BannerService', () => {
   it('should send get request when getImgUrlFromPath is called', (done) => {
     // given
     configureTestingModule();
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
-    const service: BannerService = TestBed.get(BannerService);
     const expectedUrl = '/toto/my-image.png';
     const response = {data: expectedUrl};
 
@@ -118,8 +113,6 @@ describe('BannerService', () => {
   it('should send upload image when uploadBanner is called', () => {
     // given
     configureTestingModule();
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
-    const service: BannerService = TestBed.get(BannerService);
     const imgContent = '1234567';
 
     // when

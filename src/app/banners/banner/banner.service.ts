@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BannerService {
 
-  private static WAIT_FOR_AMAZON_IS_READY: number = 1500;
+  private static WAIT_FOR_AMAZON_IS_READY = 1500;
 
   constructor(private http: HttpClient,
               private loadingService: LoadingService) {
