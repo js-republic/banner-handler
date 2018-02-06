@@ -97,8 +97,8 @@ export class BannersComponent implements OnInit {
   getBannerPicture(banner) {
     if (!banner.loading) {
       banner.loading = true;
-      this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: any) => {
-        banner.picture = url.data;
+      this.bannerService.getImgUrlFromPath(banner.path).subscribe((url: string) => {
+        banner.picture = url;
       });
     }
   }

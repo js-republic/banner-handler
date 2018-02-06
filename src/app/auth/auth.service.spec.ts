@@ -21,6 +21,7 @@ describe('AuthService', () => {
         });
 
         httpMock.expectOne('auth/user').error(new ErrorEvent('401'));
+        httpMock.verify();
       })
   );
 
@@ -35,6 +36,7 @@ describe('AuthService', () => {
         });
 
         httpMock.expectOne('auth/user').flush(expectedUser);
+        httpMock.verify();
       })
   );
 });

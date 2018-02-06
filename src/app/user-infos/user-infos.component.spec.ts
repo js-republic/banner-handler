@@ -12,8 +12,8 @@ describe('UserInfos', () => {
   let mockedAuthService: AuthService;
   let fixture: ComponentFixture<UserInfosComponent>;
 
-  function configureTestingModule() {
-    TestBed.configureTestingModule({
+  async function configureTestingModule(): Promise<any> {
+    await TestBed.configureTestingModule({
       declarations: [UserInfosComponent],
       providers: [{
         provide: AuthService,
@@ -31,10 +31,10 @@ describe('UserInfos', () => {
   });
 
 
-  it('should display user information', () => {
+  it('should display user information', async () => {
     // given
     when(mockedAuthService.user).thenReturn(of(new User('1', 'Mathieu', '/avatar.png')));
-    configureTestingModule();
+    await configureTestingModule();
 
     // then
     const displayedUsername = fixture.debugElement.query(By.css('figcaption')).nativeElement.innerHTML;
@@ -44,10 +44,10 @@ describe('UserInfos', () => {
     expect(displayedImg).toEqual('/avatar.png');
   });
 
-  it('should not display user information', () => {
+  it('should not display user information', async () => {
     // given
     when(mockedAuthService.user).thenReturn(of(null));
-    configureTestingModule();
+    await configureTestingModule();
 
     // then
     const nbUsernameDisplayed = fixture.debugElement.queryAll(By.css('figcaption')).length;
