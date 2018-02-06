@@ -12,7 +12,7 @@ export class AuthService {
   private userSource: Subject<User> = new AsyncSubject();
 
   public get user(): Observable<User> {
-    return this.userSource;
+    return this.userSource.asObservable();
   }
 
   constructor(private http: HttpClient) {
