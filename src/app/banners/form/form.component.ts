@@ -4,7 +4,7 @@ import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 
 import {Banner} from '../banner/banner.model';
 import {BannerService} from '../banner/banner.service';
-import moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-banner-form',

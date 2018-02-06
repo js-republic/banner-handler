@@ -15,7 +15,7 @@
           <mat-form-field>
             <input
               name="begin"
-              placeholder="Date début de publication"
+              placeholder="Date début de publication (à minuit)"
               matInput
               [matDatepicker]="beginPicker"
               [(ngModel)]="banner.begin"
@@ -29,7 +29,7 @@
 
             <input
               name="end"
-              placeholder="Date fin de publication"
+              placeholder="Date fin de publication (à minuit)"
               matInput
               [matDatepicker]="endPicker"
               [(ngModel)]="banner.end"
