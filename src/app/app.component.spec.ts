@@ -1,40 +1,16 @@
-import { async, TestBed } from '@angular/core/testing';
+import {async, TestBed} from '@angular/core/testing';
 
-import { MatToolbarModule } from '@angular/material';
-
-import { AppComponent } from './app.component';
-import { UserInfosComponent } from './user-infos/user-infos.component';
-import { LoaderComponent } from './loader/loader.component';
-import { LoadingService } from './loader/loading.service';
-import { AuthService } from './auth/auth.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { instance, mock, when } from 'ts-mockito';
-import { User } from './auth/user';
-import { of } from 'rxjs/observable/of';
+import {AppComponent} from './app.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(
     async(() => {
-      const mockedAuthService = mock(AuthService);
-      when(mockedAuthService.user).thenReturn(
-        of(new User('1', 'Mathieu', '/avatar.png'))
-      );
-
       TestBed.configureTestingModule({
-        providers: [
-          {
-            provide: AuthService,
-            useFactory: () => instance(mockedAuthService)
-          },
-          LoadingService
-        ],
-        imports: [
-          MatToolbarModule,
-          RouterTestingModule,
-          HttpClientTestingModule
-        ],
-        declarations: [AppComponent, UserInfosComponent, LoaderComponent]
+        providers: [],
+        imports: [],
+        declarations: [AppComponent],
+        schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
     })
   );

@@ -1,28 +1,12 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {FormsModule} from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {anyString, instance, mock, when} from 'ts-mockito';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatNativeDateModule,
-  MatProgressBarModule,
-  MatSidenavModule,
-  MatSortModule,
-  MatToolbarModule
-} from '@angular/material';
+import {MatButtonModule, MatSortModule} from '@angular/material';
 
 import {MomentModule} from 'angular2-moment';
-import {FileUploadModule} from 'ng2-file-upload';
 
 import {BannersComponent} from './banners.component';
-import {FormComponent} from './form/form.component';
 
 import {BannerService} from './banner/banner.service';
 
@@ -34,56 +18,46 @@ import {Banner} from './banner/banner.model';
 describe('BannerComponent', () => {
 
   let component: BannersComponent;
+  let fixture: ComponentFixture<BannersComponent>;
   let mockedBannerService: BannerService;
   let mockedLoadingService: LoadingService;
-  let fixture: ComponentFixture<BannersComponent>;
 
-  beforeEach(async(() => {
-
-    mockedBannerService = mock(BannerService);
-    mockedLoadingService = mock(LoadingService);
-
-    when(mockedBannerService.loadBanners()).thenReturn(of([new Banner()]));
-    when(mockedBannerService.getImgUrlFromPath(anyString())).thenReturn(of(''));
-
-    TestBed.configureTestingModule({
+  async function configureTestingModule(): Promise<any> {
+    return TestBed.configureTestingModule({
       providers: [
         {provide: LoadingService, useValue: instance(mockedLoadingService)},
         {provide: BannerService, useValue: instance(mockedBannerService)},
       ],
       imports: [
-        FormsModule,
         MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
         MatSortModule,
-        MatCheckboxModule,
-        MatProgressBarModule,
-        MatSidenavModule,
         MomentModule,
-        FileUploadModule,
-        BrowserAnimationsModule
       ],
       declarations: [
         BannersComponent,
-        FormComponent,
         AliciaKeys
-      ]
-    }).compileComponents();
-  }));
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(BannersComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      });
+  }
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BannersComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockedBannerService = mock(BannerService);
+    mockedLoadingService = mock(LoadingService);
   });
 
-  it('should be created', () => {
+  it('should be created', async () => {
+    // given
+    when(mockedBannerService.loadBanners()).thenReturn(of([new Banner()]));
+    when(mockedBannerService.getImgUrlFromPath(anyString())).thenReturn(of(''));
+    await configureTestingModule();
+
     expect(component).toBeTruthy();
   });
 });
