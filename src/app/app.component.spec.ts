@@ -1,50 +1,42 @@
-import { async, TestBed } from '@angular/core/testing';
+import {async, TestBed} from '@angular/core/testing';
 
-import { MatToolbarModule } from '@angular/material';
-
-import { AppComponent } from './app.component';
-import { UserInfosComponent } from './user-infos/user-infos.component';
-import { LoaderComponent } from './loader/loader.component';
-import { LoadingService } from './loader/loading.service';
-import { AuthService } from './auth/auth.service';
-import { AuthServiceMock } from './auth/auth.service.mock';
-import { RouterTestingModule } from '@angular/router/testing';
+import {AppComponent} from './app.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('AppComponent', () => {
+  beforeEach(
+    async(() => {
+      TestBed.configureTestingModule({
+        providers: [],
+        imports: [],
+        declarations: [AppComponent],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        { provide: AuthService, useClass: AuthServiceMock },
-        LoadingService
-      ],
-      imports: [
-        MatToolbarModule,
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent, UserInfosComponent, LoaderComponent
-      ]
-    }).compileComponents();
-  }));
+  it(
+    'should create the app',
+    async(() => {
+      const fixture = TestBed.createComponent(AppComponent);
+      const app = fixture.debugElement.componentInstance;
 
-  it('should create the app', async(() => {
+      expect(app).toBeTruthy();
+    })
+  );
 
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+  it(
+    'should render title in a h1 tag',
+    async(() => {
+      const fixture = TestBed.createComponent(AppComponent);
+      const compiled = fixture.debugElement.nativeElement;
 
-    expect(app).toBeTruthy();
-  }));
+      fixture.detectChanges();
 
-  it('should render title in a h1 tag', async(() => {
+      const selectorText = compiled.querySelector('mat-toolbar span')
+        .textContent;
 
-    const fixture = TestBed.createComponent(AppComponent);
-    const compiled = fixture.debugElement.nativeElement;
-
-    fixture.detectChanges();
-
-    const selectorText = compiled.querySelector('mat-toolbar span').textContent;
-
-    expect(selectorText).toBe('Gestionnaire de bannière d\'Email');
-  }));
+      expect(selectorText).toBe('Gestionnaire de bannière d\'Email');
+    })
+  );
 });

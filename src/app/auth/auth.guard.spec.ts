@@ -1,35 +1,43 @@
-import { TestBed, async, inject } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-
 import { AuthGard } from './auth.guard';
+import { anything, instance, mock, verify, when } from 'ts-mockito';
 
 import { AuthService } from './auth.service';
-import { AuthServiceMock } from './auth.service.mock';
-
-const providers  = [
-	AuthGard,
-	HttpClient,
-	HttpHandler,
-	{
-		provide: AuthService,
-		useValue: AuthServiceMock
-	},
-	{
-		provide: Router,
-		useClass: class { navigate = jasmine.createSpy('navigate'); }
-	}
-];
+import { of } from 'rxjs/observable/of';
+import { User } from './user';
+import { Router } from '@angular/router';
 
 describe('AuthGard', () => {
 
+  let mockedService: AuthService;
+  let mockedRouter: Router;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers
+    mockedService = mock(AuthService);
+    mockedRouter = mock(Router);
+  });
+
+  it('should return pass when user is present', done => {
+    // given
+    when(mockedService.user).thenReturn(of(new User('1', 'Mathieu', '/avatar.png')));
+    const guard = new AuthGard(instance(mockedRouter), instance(mockedService));
+
+    // then
+    guard.canActivate(null, null).subscribe(shouldPass => {
+      expect(shouldPass).toBe(true);
+      done();
     });
   });
 
-  it('should ...', inject([AuthGard], (guard: AuthGard) => {
-    expect(guard).toBeTruthy();
-  }));
+  it('should not return pass and forward to login when user is missing', done => {
+    // given
+    when(mockedService.user).thenReturn(of(null));
+    const guard = new AuthGard(instance(mockedRouter), instance(mockedService));
+
+    // then
+    guard.canActivate(null, null).subscribe(shouldPass => {
+      expect(shouldPass).toBe(false);
+      verify(mockedRouter.navigate(anything())).once();
+      done();
+    });
+  });
 });

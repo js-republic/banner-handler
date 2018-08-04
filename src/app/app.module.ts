@@ -34,7 +34,7 @@ import { BannersComponent } from './banners/banners.component';
 import { BannerService } from './banners/banner/banner.service';
 import { AuthService } from './auth/auth.service';
 /* The best */
-import { AliciaKeys } from './banners/aliciakeys.pipe';
+import { AliciaKeys } from './commons/aliciakeys.pipe';
 
 import { AuthGard } from './auth/auth.guard';
 import { LoaderComponent } from './loader/loader.component';
@@ -47,7 +47,15 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, BannersComponent, UserInfosComponent, LoginComponent, AliciaKeys, FormComponent, LoaderComponent],
+  declarations: [
+    AppComponent,
+    BannersComponent,
+    UserInfosComponent,
+    LoginComponent,
+    AliciaKeys,
+    FormComponent,
+    LoaderComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -67,9 +75,7 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     FileUploadModule,
     MatSidenavModule,
-    RouterModule.forRoot(
-      appRoutes,
-    ),
+    RouterModule.forRoot(appRoutes),
     MomentModule
   ],
   providers: [
@@ -81,5 +87,4 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

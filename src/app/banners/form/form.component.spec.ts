@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { FormsModule } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 
 import {
   MatButtonModule,
@@ -18,23 +18,32 @@ import {
   MatToolbarModule
 } from '@angular/material';
 
-import { FileUploadModule } from 'ng2-file-upload';
+import {FileUploadModule} from 'ng2-file-upload';
 
-import { FormComponent } from './form.component';
+import {FormComponent} from './form.component';
 
-import { Banner } from '../banner/banner.model';
-import { BannerService } from '../banner/banner.service';
-import { BannerServiceMock } from '../banner/banner.service.mock';
-import { LoadingService } from '../../loader/loading.service';
+import {Banner} from '../banner/banner.model';
+import {BannerService} from '../banner/banner.service';
+import {LoadingService} from '../../loader/loading.service';
+import {anyString, instance, mock, when} from 'ts-mockito';
+import {of} from 'rxjs/observable/of';
 
 describe('FormComponent', () => {
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
+  let mockedBannerService: BannerService;
 
   beforeEach(async(() => {
+
+    mockedBannerService = mock(BannerService);
+
+    when(mockedBannerService.loadBanners()).thenReturn(of([new Banner()]));
+    when(mockedBannerService.getImgUrlFromPath(anyString())).thenReturn(of(''));
+
     TestBed.configureTestingModule({
       providers: [
-        LoadingService
+        LoadingService,
+        {provide: BannerService, useValue: instance(mockedBannerService)},
       ],
       imports: [
         FormsModule,
@@ -57,16 +66,6 @@ describe('FormComponent', () => {
         FormComponent
       ]
     })
-      .overrideComponent(FormComponent, {
-        set: {
-          providers: [
-            {
-              provide: BannerService,
-              useValue: new BannerServiceMock(null, null)
-            }
-          ]
-        }
-      })
       .compileComponents();
   }));
 
@@ -94,7 +93,7 @@ describe('FormComponent', () => {
     let buttonSave;
     let imgPreview;
 
-    function expectResult({ attr, img }) {
+    function expectResult({attr, img}) {
 
       compiled = fixture.debugElement.nativeElement;
 

@@ -1,92 +1,59 @@
-/**
- * Angular imports
- */
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {anyString, instance, mock, when} from 'ts-mockito';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatButtonModule, MatSortModule} from '@angular/material';
 
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatNativeDateModule,
-  MatProgressBarModule,
-  MatSidenavModule,
-  MatSortModule,
-  MatToolbarModule
-} from '@angular/material';
+import {MomentModule} from 'angular2-moment';
 
-import { MomentModule } from 'angular2-moment';
-import { FileUploadModule } from 'ng2-file-upload';
+import {BannersComponent} from './banners.component';
 
-import { BannersComponent } from './banners.component';
-import { FormComponent } from './form/form.component';
+import {BannerService} from './banner/banner.service';
 
-import { BannerService } from './banner/banner.service';
-import { BannerServiceMock } from './banner/banner.service.mock';
-
-import { AliciaKeys } from './aliciakeys.pipe';
-import { LoadingService } from '../loader/loading.service';
+import {AliciaKeys} from '../commons/aliciakeys.pipe';
+import {of} from 'rxjs/observable/of';
+import {Banner} from './banner/banner.model';
 
 describe('BannerComponent', () => {
 
   let component: BannersComponent;
   let fixture: ComponentFixture<BannersComponent>;
+  let mockedBannerService: BannerService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  async function configureTestingModule(): Promise<any> {
+    return TestBed.configureTestingModule({
       providers: [
-        LoadingService
+        {provide: BannerService, useValue: instance(mockedBannerService)}
       ],
       imports: [
-        FormsModule,
         MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
         MatSortModule,
-        MatCheckboxModule,
-        MatProgressBarModule,
-        MatSidenavModule,
         MomentModule,
-        FileUploadModule,
-        BrowserAnimationsModule
       ],
       declarations: [
         BannersComponent,
-        FormComponent,
         AliciaKeys
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-      .overrideComponent(BannersComponent, {
-        set: {
-          providers: [
-            {
-              provide: BannerService,
-              useValue: new BannerServiceMock(null, null)
-            }
-          ]
-        }
-      })
-      .compileComponents();
-  }));
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(BannersComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      });
+  }
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BannersComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockedBannerService = mock(BannerService);
   });
 
-  it('should be created', () => {
+  it('should be created', async () => {
+    // given
+    when(mockedBannerService.loadBanners()).thenReturn(of([new Banner()]));
+    when(mockedBannerService.getImgUrlFromPath(anyString())).thenReturn(of(''));
+    await configureTestingModule();
+
     expect(component).toBeTruthy();
   });
 });
